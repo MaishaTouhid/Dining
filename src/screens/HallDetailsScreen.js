@@ -167,6 +167,10 @@ export default function HallDetailsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
+        {/* Back button 
+        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+          <Text style={styles.backText}>‹ Back</Text>
+        </TouchableOpacity> */}
 
         {/* Hall info card */}
         <View style={styles.infoCard}>
@@ -232,6 +236,7 @@ export default function HallDetailsScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F5F7FB' },
   scroll: { padding: 16, paddingBottom: 40 },
+
 
   // Info card
   infoCard: {
@@ -400,3 +405,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255,255,255,0.6)',
   },
 });
+
+ {/* backBtn: { paddingVertical: 8, paddingHorizontal: 4, marginBottom: 8 },
+  backText: { fontSize: 16, color: '#6e96eb', fontWeight: '700' }, */}

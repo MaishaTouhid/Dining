@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'expo-router';
 import {
   View, Text, StyleSheet, TouchableOpacity,
   ScrollView, SafeAreaView, ActivityIndicator,
@@ -11,6 +12,7 @@ export default function NoticesScreen() {
   const [canteenNotices, setCanteenNotices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(null);
+  const router = useRouter();
 
   useEffect(() => { fetchAll(); }, []);
 
@@ -31,9 +33,7 @@ export default function NoticesScreen() {
 
   function renderNoticeList(list) {
     if (list.length === 0) {
-      return (
-        <Text style={styles.empty}>No notices available.</Text>
-      );
+      return <Text style={styles.empty}>No notices available.</Text>;
     }
     return list.map((n, idx) => (
       <View key={n.id || idx} style={styles.noticeCard}>
@@ -54,6 +54,12 @@ export default function NoticesScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
+
+        {/* Back button  
+        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+          <Text style={styles.backText}>‹ Back</Text>
+        </TouchableOpacity>   */}
+
         <Text style={styles.pageTitle}>Notice Updates</Text>
 
         {loading ? (
@@ -61,7 +67,6 @@ export default function NoticesScreen() {
         ) : (
           SECTIONS.map(section => (
             <View key={section.key} style={styles.section}>
-              {/* Header */}
               <TouchableOpacity
                 style={styles.sectionHeader}
                 onPress={() => toggle(section.key)}
@@ -71,8 +76,6 @@ export default function NoticesScreen() {
                   {expanded === section.key ? '∧' : '∨'}
                 </Text>
               </TouchableOpacity>
-
-              {/* Content */}
               {expanded === section.key && (
                 <View style={styles.sectionBody}>
                   {renderNoticeList(section.list)}
@@ -95,63 +98,29 @@ export default function NoticesScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F5F7FB' },
   scroll: { padding: 16, paddingBottom: 40 },
-
-  pageTitle: {
-    fontSize: 22, fontWeight: '800',
-    color: '#1a1a2e', marginBottom: 16,
-  },
-
+  pageTitle: { fontSize: 22, fontWeight: '800', color: '#1a1a2e', marginBottom: 16 },
   section: {
-    backgroundColor: '#fff',
-    borderRadius: 14,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: '#e5e7eb',
-    overflow: 'hidden',
+    backgroundColor: '#fff', borderRadius: 14,
+    marginBottom: 10, borderWidth: 1, borderColor: '#e5e7eb', overflow: 'hidden',
   },
   sectionHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
+    flexDirection: 'row', alignItems: 'center',
+    justifyContent: 'space-between', padding: 16,
   },
-  sectionTitle: {
-    fontSize: 15, fontWeight: '700', color: '#1a1a2e',
-  },
-  chevron: {
-    fontSize: 14, color: '#9ca3af', fontWeight: '700',
-  },
+  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#1a1a2e' },
+  chevron: { fontSize: 14, color: '#9ca3af', fontWeight: '700' },
   sectionBody: {
-    paddingHorizontal: 14,
-    paddingBottom: 14,
-    borderTopWidth: 1,
-    borderTopColor: '#f3f4f6',
+    paddingHorizontal: 14, paddingBottom: 14,
+    borderTopWidth: 1, borderTopColor: '#f3f4f6',
   },
-
   noticeCard: {
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6',
+    paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#f3f4f6',
   },
-  noticeHall: {
-    fontSize: 13, fontWeight: '700',
-    color: '#1a1a2e', marginBottom: 4,
-  },
-  noticeMsg: {
-    fontSize: 13, color: '#4b5563',
-    lineHeight: 18, marginBottom: 6,
-  },
-  noticeDate: {
-    fontSize: 11, color: '#6e96eb', fontWeight: '600',
-  },
-
-  empty: {
-    fontSize: 13, color: '#9ca3af',
-    paddingVertical: 12,
-  },
-  tapHint: {
-    textAlign: 'center',
-    fontSize: 12, color: '#9ca3af',
-    marginTop: 24,
-  },
+  noticeHall: { fontSize: 13, fontWeight: '700', color: '#1a1a2e', marginBottom: 4 },
+  noticeMsg: { fontSize: 13, color: '#4b5563', lineHeight: 18, marginBottom: 6 },
+  noticeDate: { fontSize: 11, color: '#6e96eb', fontWeight: '600' },
+  empty: { fontSize: 13, color: '#9ca3af', paddingVertical: 12 },
+  tapHint: { textAlign: 'center', fontSize: 12, color: '#9ca3af', marginTop: 24 },
 });
+ {/*backBtn: { paddingVertical: 8, paddingHorizontal: 4, marginBottom: 8 },
+  backText: { fontSize: 16, color: '#6e96eb', fontWeight: '700' },*/}
