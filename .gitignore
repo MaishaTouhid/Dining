@@ -1,0 +1,7 @@
+node_modules/
+.expo/
+.git/
+.DS_Store
+Library/
+*.cache
+scripts/serviceAccountKey.json
