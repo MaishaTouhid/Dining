@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import {
   View, Text, StyleSheet, TouchableOpacity,
-  ScrollView, SafeAreaView, ActivityIndicator,
+  ScrollView, ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFeasts } from '../data/repository';
 import { getTodayKey, formatDisplay, daysUntil } from '../data/date';
 

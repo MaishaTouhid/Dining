@@ -2,6 +2,12 @@
   "expo": {
     "name": "RUDining",
     "slug": "RUDining",
+    "platforms": ["ios", "android", "web"],
+"web": {
+  "bundler": "metro",
+  "output": "static",
+  "favicon": "./assets/favicon.png"
+},
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
-  SafeAreaView, ScrollView, ActivityIndicator, Alert,
+   ScrollView, ActivityIndicator, Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { duplicateYesterday, upsertMenu } from '../data/repository';
 import { getTodayKey } from '../data/date';

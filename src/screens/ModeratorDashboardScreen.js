@@ -1,8 +1,9 @@
 import React from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
-  SafeAreaView, ScrollView, Alert,
+   ScrollView, Alert,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config/firebase';

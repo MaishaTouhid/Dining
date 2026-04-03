@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {
-  View, Text, StyleSheet, SafeAreaView
+  View, Text, StyleSheet
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -21,12 +22,13 @@ export default function SplashScreen() {
   useEffect(() => {
     const timer = setTimeout(async () => {
       try {
-        const seen = await AsyncStorage.getItem('onboarding_done');
+        router.replace('/Onboarding');
+       /* const seen = await AsyncStorage.getItem('onboarding_done');
         if (seen) {
           router.replace('/Home');
         } else {
           router.replace('/Onboarding');
-        }
+        }*/
       } catch {
         router.replace('/Onboarding');
       }

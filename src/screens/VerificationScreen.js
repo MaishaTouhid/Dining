@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet,
-  SafeAreaView, ScrollView, ActivityIndicator,
+   ScrollView, ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams } from 'expo-router';
 import { getMenu, getUpdateHistory } from '../data/repository';
 import { getTodayKey, formatTime } from '../data/date';

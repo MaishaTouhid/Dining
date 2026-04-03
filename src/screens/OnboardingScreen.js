@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
-  FlatList, Dimensions, SafeAreaView,
+  FlatList, Dimensions, 
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -38,7 +39,7 @@ export default function OnboardingScreen() {
   const flatRef = useRef(null);
 
   async function finish() {
-    await AsyncStorage.setItem('onboarding_done', 'true');
+   // await AsyncStorage.setItem('onboarding_done', 'true');
     router.replace('/Home');
   }
 
