@@ -1,7 +1,7 @@
 import {
   doc, getDoc, setDoc, addDoc, updateDoc, deleteDoc,
   collection, query, where, orderBy, getDocs,
-  serverTimestamp,
+  onSnapshot, serverTimestamp, limit, startAfter,
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import { getTodayKey } from './date';
@@ -19,6 +19,14 @@ export async function getMenu(hallId, dateKey) {
   }
 }
 
+// Real-time listener for student view
+export function subscribeMenu(hallId, dateKey, callback) {
+  const ref = doc(db, 'menus', `${hallId}_${dateKey}`);
+  return onSnapshot(ref, (snap) => {
+    callback(snap.exists() ? snap.data() : null);
+  });
+}
+
 export async function upsertMenu(hallId, dateKey, payload) {
   const ref = doc(db, 'menus', `${hallId}_${dateKey}`);
   const snap = await getDoc(ref);
@@ -34,7 +42,6 @@ export async function upsertMenu(hallId, dateKey, payload) {
   }
 }
 
-// dining meals: { breakfast: {items:[], time:''}, lunch:..., dinner:... }
 export async function saveDiningMenu(hallId, dateKey, meals, moderatorName) {
   await upsertMenu(hallId, dateKey, {
     dining: meals,
@@ -43,7 +50,6 @@ export async function saveDiningMenu(hallId, dateKey, meals, moderatorName) {
   });
 }
 
-// canteen items: [{name, price, count, status}]
 export async function saveCanteenMenu(hallId, dateKey, items, moderatorName) {
   await upsertMenu(hallId, dateKey, {
     canteen: { items },
@@ -52,7 +58,6 @@ export async function saveCanteenMenu(hallId, dateKey, items, moderatorName) {
   });
 }
 
-// quick status update only (no menu change)
 export async function quickUpdateDining(hallId, dateKey, meals) {
   await upsertMenu(hallId, dateKey, { dining: meals });
 }
@@ -61,7 +66,6 @@ export async function quickUpdateCanteen(hallId, dateKey, items) {
   await upsertMenu(hallId, dateKey, { canteen: { items } });
 }
 
-// duplicate yesterday's menu
 export async function duplicateYesterday(hallId, dateKey, type) {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
@@ -88,8 +92,19 @@ export async function getNotices(type) {
       where('type', '==', type)
     );
     const snap = await getDocs(q);
-    const data = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-    // Sort client-side
+    const now = new Date();
+
+    const data = snap.docs
+      .map(d => ({ id: d.id, ...d.data() }))
+      .filter(n => {
+        // Notice expiry check
+        if (!n.createdAt) return true;
+        const created = n.createdAt?.toDate?.() || new Date(n.createdAt);
+        const expiresIn = n.expiresIn || 24;
+        const expiresAt = new Date(created.getTime() + expiresIn * 3600000);
+        return expiresAt > now;
+      });
+
     return data.sort((a, b) => {
       const aTime = a.createdAt?.seconds || 0;
       const bTime = b.createdAt?.seconds || 0;
@@ -104,7 +119,8 @@ export async function getNotices(type) {
 export async function postNotice(hallId, hallName, role, payload) {
   await addDoc(collection(db, 'notices'), {
     hallId, hallName,
-    role, // 'dining' | 'canteen'
+    type: role,          // used for query filtering
+    role,
     ...payload,
     createdAt: serverTimestamp(),
   });
@@ -130,7 +146,6 @@ export async function getFeasts(type) {
       where('role', '==', type)
     );
     const snap = await getDocs(q);
-    // Deduplicate by id
     const seen = new Set();
     const data = [];
     snap.docs.forEach(d => {
@@ -187,12 +202,13 @@ export async function logUpdate(hallId, moderatorName, role, action) {
   });
 }
 
-export async function getUpdateHistory(hallId, dateKey) {
+export async function getUpdateHistory(hallId) {
   try {
     const q = query(
       collection(db, 'updateHistory'),
       where('hallId', '==', hallId),
-      orderBy('timestamp', 'desc')
+      orderBy('timestamp', 'desc'),
+      limit(50)
     );
     const snap = await getDocs(q);
     return snap.docs.map(d => ({ id: d.id, ...d.data() }));
