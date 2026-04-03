@@ -37,3 +37,6 @@ export default function RootLayout() {
     </SafeAreaProvider>
   );
 }
+
+
+//npm run deploy
