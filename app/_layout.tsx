@@ -1,10 +1,10 @@
-import { Redirect } from 'expo-router';
+/*import { Redirect } from 'expo-router';
 
 export default function App() {
   return <Redirect href="/Onboarding" />;
-}
+}*/
 
-/*
+
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
@@ -27,4 +27,3 @@ export default function RootLayout() {
     </ThemeProvider>
   );
 }
-*/

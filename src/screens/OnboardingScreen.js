@@ -39,7 +39,7 @@ export default function OnboardingScreen() {
   const flatRef = useRef(null);
 
   async function finish() {
-   // await AsyncStorage.setItem('onboarding_done', 'true');
+    await AsyncStorage.setItem('onboarding_done', 'true');
     router.replace('/Home');
   }
 

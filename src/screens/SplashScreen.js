@@ -22,13 +22,13 @@ export default function SplashScreen() {
   useEffect(() => {
     const timer = setTimeout(async () => {
       try {
-        router.replace('/Onboarding');
-       /* const seen = await AsyncStorage.getItem('onboarding_done');
+       // router.replace('/Onboarding');
+        const seen = await AsyncStorage.getItem('onboarding_done');
         if (seen) {
           router.replace('/Home');
         } else {
           router.replace('/Onboarding');
-        }*/
+        }
       } catch {
         router.replace('/Onboarding');
       }
