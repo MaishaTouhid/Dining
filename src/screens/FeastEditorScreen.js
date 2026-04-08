@@ -48,6 +48,13 @@ export default function FeastEditorScreen() {
     }
   }
 
+  function goToEditFeast() {
+    router.push({
+      pathname: '/EditFeast',
+      params: { hallId, hallName, role, moderatorName },
+    });
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -103,6 +110,12 @@ export default function FeastEditorScreen() {
           keyboardType="numeric"
         />
 
+        {/* Edit Feast button */}
+        <TouchableOpacity style={styles.editBtn} onPress={goToEditFeast}>
+          <Text style={styles.editBtnText}>Edit Feast</Text>
+        </TouchableOpacity>
+
+        {/* Save Feast button */}
         <TouchableOpacity
           style={styles.saveBtn}
           onPress={handleSave}
@@ -131,9 +144,15 @@ const styles = StyleSheet.create({
     borderWidth: 1, borderColor: '#e5e7eb', marginBottom: 16,
   },
   textArea: { minHeight: 80, textAlignVertical: 'top' },
+  editBtn: {
+    backgroundColor: '#fff', borderRadius: 14,
+    padding: 14, alignItems: 'center',
+    marginBottom: 10, borderWidth: 1, borderColor: '#e5e7eb',
+  },
+  editBtnText: { fontSize: 15, fontWeight: '700', color: '#374151' },
   saveBtn: {
     backgroundColor: '#6e96eb', borderRadius: 14,
-    padding: 16, alignItems: 'center', marginTop: 8,
+    padding: 16, alignItems: 'center', marginTop: 0,
   },
   saveBtnText: { color: '#fff', fontWeight: '800', fontSize: 16 },
 });

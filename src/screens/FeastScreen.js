@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'expo-router';
 import {
   View, Text, StyleSheet, TouchableOpacity,
-  ScrollView, ActivityIndicator,
+  ScrollView,  ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getFeasts } from '../data/repository';
@@ -24,8 +24,10 @@ export default function FeastScreen() {
       getFeasts('dining'),
       getFeasts('canteen'),
     ]);
-    setDiningFeasts(d);
-    setCanteenFeasts(c);
+    // Auto-hide: only show today and future feasts
+    const filterActive = (list) => list.filter(f => f.date >= today);
+    setDiningFeasts(filterActive(d));
+    setCanteenFeasts(filterActive(c));
     setLoading(false);
   }
 
@@ -35,7 +37,12 @@ export default function FeastScreen() {
 
   function renderFeastList(list) {
     if (list.length === 0) {
-      return <Text style={styles.empty}>No feasts announced yet.</Text>;
+      return (
+        <View style={styles.emptyBox}>
+          <Text style={styles.emptyIcon}>🍽️</Text>
+          <Text style={styles.emptyText}>No upcoming feasts announced yet.</Text>
+        </View>
+      );
     }
     return list.map((f, idx) => (
       <View key={f.id || idx} style={styles.feastCard}>
@@ -53,10 +60,15 @@ export default function FeastScreen() {
             </Text>
           </View>
         </View>
+
         {f.title ? <Text style={styles.feastTitle}>{f.title}</Text> : null}
-        <Text style={styles.feastMenu}>
-          Feast menu: {Array.isArray(f.menu) ? f.menu.join(', ') : f.menu}
-        </Text>
+
+        {f.menu && f.menu.length > 0 ? (
+          <Text style={styles.feastMenu}>
+            Feast menu: {Array.isArray(f.menu) ? f.menu.join(', ') : f.menu}
+          </Text>
+        ) : null}
+
         <View style={styles.feastBottom}>
           <Text style={styles.feastDate}>{formatDisplay(f.date)}</Text>
           {f.price ? <Text style={styles.feastPrice}>৳{f.price}</Text> : null}
@@ -74,13 +86,8 @@ export default function FeastScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-
-        {/* Back button 
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Text style={styles.backText}>‹ Back</Text>
-        </TouchableOpacity> */}
-
         <Text style={styles.pageTitle}>Feast Updates</Text>
+        <Text style={styles.pageSub}>Showing upcoming & todays feasts only</Text>
 
         {loading ? (
           <ActivityIndicator color="#6e96eb" style={{ marginTop: 40 }} />
@@ -92,9 +99,16 @@ export default function FeastScreen() {
                 onPress={() => toggle(section.key)}
               >
                 <Text style={styles.sectionTitle}>{section.title}</Text>
-                <Text style={styles.chevron}>
-                  {expanded === section.key ? '∧' : '∨'}
-                </Text>
+                <View style={styles.sectionRight}>
+                  {section.list.length > 0 && (
+                    <View style={styles.countBadge}>
+                      <Text style={styles.countBadgeText}>{section.list.length}</Text>
+                    </View>
+                  )}
+                  <Text style={styles.chevron}>
+                    {expanded === section.key ? '∧' : '∨'}
+                  </Text>
+                </View>
               </TouchableOpacity>
               {expanded === section.key && (
                 <View style={styles.sectionBody}>
@@ -107,7 +121,7 @@ export default function FeastScreen() {
 
         {expanded === null && !loading && (
           <Text style={styles.tapHint}>
-            Tap any button above to see feast details.
+            Tap any section to see feast details.
           </Text>
         )}
       </ScrollView>
@@ -118,7 +132,9 @@ export default function FeastScreen() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#F5F7FB' },
   scroll: { padding: 16, paddingBottom: 40 },
-  pageTitle: { fontSize: 22, fontWeight: '800', color: '#1a1a2e', marginBottom: 16 },
+  pageTitle: { fontSize: 22, fontWeight: '800', color: '#1a1a2e', marginBottom: 4 },
+  pageSub: { fontSize: 12, color: '#9ca3af', marginBottom: 16 },
+
   section: {
     backgroundColor: '#fff', borderRadius: 14,
     marginBottom: 10, borderWidth: 1, borderColor: '#e5e7eb', overflow: 'hidden',
@@ -128,17 +144,30 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between', padding: 16,
   },
   sectionTitle: { fontSize: 15, fontWeight: '700', color: '#1a1a2e' },
+  sectionRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  countBadge: {
+    backgroundColor: '#6e96eb', borderRadius: 10,
+    paddingHorizontal: 7, paddingVertical: 2,
+  },
+  countBadgeText: { fontSize: 11, fontWeight: '800', color: '#fff' },
   chevron: { fontSize: 14, color: '#9ca3af', fontWeight: '700' },
+
   sectionBody: {
     paddingHorizontal: 14, paddingBottom: 14,
     borderTopWidth: 1, borderTopColor: '#f3f4f6',
   },
+
+  emptyBox: { alignItems: 'center', paddingVertical: 24 },
+  emptyIcon: { fontSize: 32, marginBottom: 8 },
+  emptyText: { fontSize: 13, color: '#9ca3af' },
+
   feastCard: {
-    paddingVertical: 14, borderBottomWidth: 1, borderBottomColor: '#f3f4f6',
+    paddingVertical: 14,
+    borderBottomWidth: 1, borderBottomColor: '#f3f4f6',
   },
   feastTop: {
     flexDirection: 'row', justifyContent: 'space-between',
-    alignItems: 'center', marginBottom: 4,
+    alignItems: 'center', marginBottom: 6,
   },
   feastHall: { fontSize: 13, fontWeight: '700', color: '#1a1a2e', flex: 1 },
   countdownBadge: {
@@ -148,17 +177,13 @@ const styles = StyleSheet.create({
   countdownToday: { backgroundColor: '#fef9c3' },
   countdownText: { fontSize: 10, fontWeight: '700', color: '#6b7280' },
   countdownTodayText: { color: '#b45309' },
-  feastTitle: { fontSize: 14, fontWeight: '800', color: '#1a1a2e', marginBottom: 4 },
+  feastTitle: { fontSize: 15, fontWeight: '800', color: '#1a1a2e', marginBottom: 4 },
   feastMenu: { fontSize: 13, color: '#4b5563', lineHeight: 18, marginBottom: 8 },
   feastBottom: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
   },
   feastDate: { fontSize: 11, color: '#6e96eb', fontWeight: '600' },
-  feastPrice: { fontSize: 12, fontWeight: '800', color: '#16a34a' },
+  feastPrice: { fontSize: 13, fontWeight: '800', color: '#16a34a' },
   feastTime: { fontSize: 11, color: '#9ca3af', marginTop: 4 },
-  empty: { fontSize: 13, color: '#9ca3af', paddingVertical: 12 },
   tapHint: { textAlign: 'center', fontSize: 12, color: '#9ca3af', marginTop: 24 },
 });
-
-{/* backBtn: { paddingVertical: 8, paddingHorizontal: 4, marginBottom: 8 },
-  backText: { fontSize: 16, color: '#6e96eb', fontWeight: '700' }, */}

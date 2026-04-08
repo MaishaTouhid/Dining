@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
-  ScrollView, TextInput,
+  ScrollView,  TextInput,
   ActivityIndicator, Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +9,14 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { postNotice } from '../data/repository';
 
 const NOTICE_TYPES = ['delay', 'shortage', 'closure', 'update', 'other'];
+
+const TYPE_ICONS = {
+  delay: '🕐',
+  shortage: '⚠️',
+  closure: '🔒',
+  update: '📋',
+  other: '📌',
+};
 
 export default function NoticeEditorScreen() {
   const router = useRouter();
@@ -27,14 +35,14 @@ export default function NoticeEditorScreen() {
     }
     setSaving(true);
     try {
-    await postNotice(String(hallId), String(hallName), String(role), {
-  type: String(role), 
-  noticeType: type,   
-  title: title.trim(),
-  message: message.trim(),
-  expiresIn: Number(expiresIn) || 6,
-  moderatorName: String(moderatorName),
-});
+      await postNotice(String(hallId), String(hallName), String(role), {
+        type: String(role),
+        noticeType: type,
+        title: title.trim(),
+        message: message.trim(),
+        expiresIn: Number(expiresIn) || 6,
+        moderatorName: String(moderatorName),
+      });
       router.replace({
         pathname: '/SuccessScreen',
         params: { hallId, hallName, role, moderatorName },
@@ -46,13 +54,21 @@ export default function NoticeEditorScreen() {
     }
   }
 
+  function goToEditNotice() {
+    router.push({
+      pathname: '/EditNotice',
+      params: { hallId, hallName, role, moderatorName },
+    });
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
         <Text style={styles.pageTitle}>Post Notice</Text>
-        <Text style={styles.pageSub}>Hall: {hallId} • {role === 'dining' ? 'Dining' : 'Canteen'}</Text>
+        <Text style={styles.pageSub}>
+          Hall: {hallId} • {role === 'dining' ? 'Dining' : 'Canteen'}
+        </Text>
 
-        {/* Type */}
         <Text style={styles.label}>Type</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.typeScroll}>
           {NOTICE_TYPES.map(t => (
@@ -61,14 +77,21 @@ export default function NoticeEditorScreen() {
               style={[styles.typeChip, type === t && styles.typeChipActive]}
               onPress={() => setType(t)}
             >
+              <Text style={styles.typeChipIcon}>{TYPE_ICONS[t]}</Text>
               <Text style={[styles.typeChipText, type === t && styles.typeChipTextActive]}>
-                {t}
+                {t.charAt(0).toUpperCase() + t.slice(1)}
               </Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
 
-        {/* Title */}
+        <View style={styles.selectedTypeBox}>
+          <Text style={styles.selectedTypeIcon}>{TYPE_ICONS[type]}</Text>
+          <Text style={styles.selectedTypeText}>
+            {type.charAt(0).toUpperCase() + type.slice(1)} Notice
+          </Text>
+        </View>
+
         <Text style={styles.label}>Title</Text>
         <TextInput
           style={styles.input}
@@ -78,7 +101,6 @@ export default function NoticeEditorScreen() {
           onChangeText={setTitle}
         />
 
-        {/* Message */}
         <Text style={styles.label}>Message</Text>
         <TextInput
           style={[styles.input, styles.textArea]}
@@ -90,7 +112,6 @@ export default function NoticeEditorScreen() {
           numberOfLines={4}
         />
 
-        {/* Expires */}
         <Text style={styles.label}>Expires in (hours)</Text>
         <TextInput
           style={styles.input}
@@ -100,6 +121,10 @@ export default function NoticeEditorScreen() {
           placeholder="6"
           placeholderTextColor="#9ca3af"
         />
+
+        <TouchableOpacity style={styles.editBtn} onPress={goToEditNotice}>
+          <Text style={styles.editBtnText}>Edit Notice</Text>
+        </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.postBtn}
@@ -123,25 +148,41 @@ const styles = StyleSheet.create({
   pageTitle: { fontSize: 22, fontWeight: '900', color: '#1a1a2e', marginBottom: 4 },
   pageSub: { fontSize: 12, color: '#6b7280', marginBottom: 20 },
   label: { fontSize: 13, fontWeight: '700', color: '#374151', marginBottom: 8 },
-  typeScroll: { marginBottom: 16 },
+  typeScroll: { marginBottom: 12 },
   typeChip: {
-    paddingHorizontal: 16, paddingVertical: 8,
+    flexDirection: 'row', alignItems: 'center',
+    paddingHorizontal: 14, paddingVertical: 8,
     borderRadius: 20, backgroundColor: '#fff',
     borderWidth: 1, borderColor: '#e5e7eb',
-    marginRight: 8,
+    marginRight: 8, gap: 6,
   },
   typeChipActive: { backgroundColor: '#eef2ff', borderColor: '#6e96eb' },
+  typeChipIcon: { fontSize: 14 },
   typeChipText: { fontSize: 13, fontWeight: '600', color: '#6b7280' },
   typeChipTextActive: { color: '#6e96eb' },
+  selectedTypeBox: {
+    flexDirection: 'row', alignItems: 'center',
+    backgroundColor: '#fffbeb', borderRadius: 10,
+    padding: 12, marginBottom: 16, gap: 8,
+    borderWidth: 1, borderColor: '#fde68a',
+  },
+  selectedTypeIcon: { fontSize: 18 },
+  selectedTypeText: { fontSize: 14, fontWeight: '700', color: '#b45309' },
   input: {
     backgroundColor: '#fff', borderRadius: 12,
     padding: 14, fontSize: 14, color: '#1a1a2e',
     borderWidth: 1, borderColor: '#e5e7eb', marginBottom: 16,
   },
   textArea: { minHeight: 100, textAlignVertical: 'top' },
+  editBtn: {
+    backgroundColor: '#fff', borderRadius: 14,
+    padding: 14, alignItems: 'center',
+    marginBottom: 10, borderWidth: 1, borderColor: '#e5e7eb',
+  },
+  editBtnText: { fontSize: 15, fontWeight: '700', color: '#374151' },
   postBtn: {
     backgroundColor: '#6e96eb', borderRadius: 14,
-    padding: 16, alignItems: 'center', marginTop: 8,
+    padding: 16, alignItems: 'center',
   },
   postBtnText: { color: '#fff', fontWeight: '800', fontSize: 16 },
 });
