@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HallMenu RU — Prototype</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, 'Segoe UI', sans-serif;
+  background: #1a1a1a;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 32px 16px;
+}
+
+.outer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.label {
+  color: rgba(255,255,255,0.5);
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.phone {
+  width: 375px;
+  height: 750px;
+  background: #f5f0e8;
+  border-radius: 50px;
+  border: 10px solid #111;
+  box-shadow: 0 0 0 2px #555, inset 0 0 0 1px #333, 0 32px 80px rgba(0,0,0,0.7);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.notch {
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 130px; height: 30px;
+  background: #111;
+  border-radius: 0 0 20px 20px;
+  z-index: 100;
+}
+
+.status-bar {
+  height: 44px;
+  background: #f5f0e8;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 20px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #1a1a1a;
+  position: relative;
+  z-index: 50;
+  flex-shrink: 0;
+}
+
+.screen {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.slide {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #f5f0e8;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: none;
+  padding-bottom: 20px;
+}
+.slide.active { display: block; }
+.slide::-webkit-scrollbar { width: 0; }
+
+/* Header */
+.app-header {
+  background: #2d6a4f;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  font-size: 17px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  position: relative;
+  flex-shrink: 0;
+}
+.app-header .back-btn {
+  position: absolute; left: 14px;
+  font-size: 22px; cursor: pointer;
+  color: white; padding: 4px;
+}
+.app-header .title { flex: 1; text-align: center; font-size: 17px; }
+
+/* Splash */
+.splash {
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  height: 100%; background: #f5f0e8; padding: 40px 24px;
+}
+.splash .logo {
+  width: 88px; height: 88px; background: #52b788;
+  border-radius: 22px; display: flex; align-items: center;
+  justify-content: center; color: white; font-size: 30px; font-weight: 700;
+  margin-bottom: 18px;
+  box-shadow: 0 8px 24px rgba(92,107,192,0.35);
+}
+.splash h1 { font-size: 26px; font-weight: 700; color: #1a1a1a; margin-bottom: 6px; }
+.splash .sub { font-size: 13px; color: #888; margin-bottom: 36px; }
+.dots { display: flex; gap: 6px; margin-bottom: auto; }
+.dot { width: 8px; height: 8px; border-radius: 50%; background: #b7d5b0; }
+.dot.active { background: #2d6a4f; width: 20px; border-radius: 4px; }
+.splash-footer { font-size: 12px; color: #bbb; margin-top: auto; }
+
+/* Onboarding */
+.onboarding {
+  display: flex; flex-direction: column;
+  align-items: center; min-height: 100%;
+  background: #f5f0e8; padding: 20px 24px;
+}
+.onboarding .skip-btn {
+  align-self: flex-end; color: #888; font-size: 14px;
+  cursor: pointer; padding: 4px 8px;
+}
+.onboard-icon { font-size: 56px; margin: 40px 0 24px; }
+.onboarding h2 { font-size: 24px; font-weight: 700; color: #1a1a1a; text-align: center; margin-bottom: 12px; }
+.onboarding p { font-size: 14px; color: #666; text-align: center; line-height: 1.6; margin-bottom: 32px; }
+
+.btn-primary {
+  width: 100%; padding: 15px; background: #2d6a4f;
+  color: white; border: none; border-radius: 14px;
+  font-size: 16px; font-weight: 600; cursor: pointer;
+  margin-bottom: 10px; transition: background 0.15s;
+}
+.btn-primary:hover { background: #1b4332; }
+.btn-primary:active { transform: scale(0.98); }
+
+.btn-secondary {
+  width: 100%; padding: 14px; background: #d8ead2;
+  color: #2d6a4f; border: none; border-radius: 14px;
+  font-size: 16px; font-weight: 600; cursor: pointer;
+  margin-bottom: 10px; transition: background 0.15s;
+}
+.btn-secondary:hover { background: #c3ddc0; }
+
+.btn-outline {
+  width: 45%; padding: 14px; background: #d8ead2;
+  color: #555; border: none; border-radius: 14px;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-danger {
+  width: 45%; padding: 14px; background: #fff3f3;
+  color: #e53935; border: 1.5px solid #ffcdd2; border-radius: 14px;
+  font-size: 15px; font-weight: 600; cursor: pointer;
+}
+.btn-row { display: flex; gap: 10px; width: 100%; margin-top: auto; margin-bottom: 8px; }
+.onboarding-footer { font-size: 12px; color: #bbb; margin-top: 12px; }
+.dots-row { display: flex; gap: 6px; margin: 16px 0; }
+
+/* Cards */
+.card {
+  background: white; border-radius: 14px;
+  margin: 0 16px 12px; padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.section-title {
+  font-size: 13px; font-weight: 700; color: #888;
+  padding: 16px 16px 8px; text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+/* Role select */
+.role-card {
+  background: white; border-radius: 14px;
+  margin: 0 16px 10px; padding: 16px;
+  display: flex; align-items: center; gap: 14px;
+  cursor: pointer; transition: transform 0.1s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.role-card:active { transform: scale(0.98); }
+.role-icon {
+  width: 48px; height: 48px; border-radius: 12px;
+  background: #d8ead2; display: flex; align-items: center;
+  justify-content: center; font-size: 22px; flex-shrink: 0;
+}
+.role-info h3 { font-size: 16px; font-weight: 600; color: #1a1a1a; }
+.role-info p { font-size: 12px; color: #888; line-height: 1.4; margin-top: 2px; }
+.role-arrow { margin-left: auto; color: #bbb; font-size: 20px; }
+
+/* Hall list */
+.search-bar {
+  margin: 12px 16px; background: white; border-radius: 12px;
+  padding: 11px 14px; font-size: 14px; color: #aaa;
+  border: none; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.filter-row { display: flex; gap: 8px; padding: 0 16px 12px; flex-wrap: wrap; }
+.filter-chip {
+  padding: 6px 14px; border-radius: 20px; font-size: 13px;
+  cursor: pointer; border: 1.5px solid #e0e0e0; background: white; color: #555;
+  transition: all 0.15s;
+}
+.filter-chip.active { background: #2d6a4f; color: white; border-color: #2d6a4f; }
+
+.hall-card {
+  background: white; border-radius: 14px;
+  margin: 0 16px 10px; padding: 14px 16px;
+  cursor: pointer; transition: transform 0.1s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.hall-card:active { transform: scale(0.98); }
+.hall-card h3 { font-size: 15px; font-weight: 600; color: #1a1a1a; }
+.hall-card p { font-size: 12px; color: #888; margin-top: 3px; }
+.hall-card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; }
+.hall-badge { font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 8px; }
+.badge-boys { background: #e3f2fd; color: #1565c0; }
+.badge-girls { background: #fce4ec; color: #c62828; }
+.status-updated { font-size: 12px; color: #388e3c; background: #e8f5e9; padding: 3px 10px; border-radius: 8px; }
+.status-not { font-size: 12px; color: #999; background: #f5f5f5; padding: 3px 10px; border-radius: 8px; }
+.meal-types { font-size: 11px; color: #bbb; }
+
+/* Menu screen */
+.hall-info-card {
+  background: white; border-radius: 14px;
+  margin: 12px 16px; padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.hall-info-card h2 { font-size: 18px; font-weight: 700; color: #1a1a1a; }
+.hall-meta { font-size: 12px; color: #888; margin-top: 4px; }
+.menu-type-btn {
+  background: white; border-radius: 14px;
+  margin: 0 16px 10px; padding: 16px;
+  cursor: pointer; border: 1.5px solid #d8ead2;
+  transition: border-color 0.15s, transform 0.1s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+.menu-type-btn:hover { border-color: #2d6a4f; }
+.menu-type-btn:active { transform: scale(0.98); }
+.menu-type-btn h3 { font-size: 15px; font-weight: 600; color: #1a1a1a; }
+.menu-type-btn p { font-size: 12px; color: #888; margin-top: 3px; }
+
+/* Detail */
+.meal-section { margin: 0 16px 10px; }
+.meal-section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  background: white; padding: 12px 16px; border-radius: 14px 14px 0 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+.meal-section-header h3 { font-size: 15px; font-weight: 600; }
+.meal-status {
+  font-size: 11px; padding: 3px 8px; border-radius: 8px; font-weight: 600;
+}
+.status-not-updated { background: #fff3e0; color: #e65100; }
+.status-finished { background: #e3f2fd; color: #1565c0; }
+.status-available { background: #e8f5e9; color: #2e7d32; }
+.status-low { background: #fff8e1; color: #f57f17; }
+
+.meal-item {
+  background: white; padding: 12px 16px;
+  border-bottom: 1px solid #f5f5f5;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.meal-item:last-child { border-radius: 0 0 14px 14px; border-bottom: none; }
+.meal-item-name { font-size: 14px; font-weight: 500; color: #1a1a1a; }
+.meal-item-meta { font-size: 11px; color: #aaa; margin-top: 2px; }
+
+.meal-tabs { display: flex; gap: 6px; margin: 0 16px 10px; }
+.meal-tab {
+  padding: 7px 16px; border-radius: 20px; font-size: 13px;
+  border: 1.5px solid #2d6a4f; color: #2d6a4f; cursor: pointer; background: white;
+  transition: all 0.15s;
+}
+.meal-tab.active { background: #2d6a4f; color: white; }
+
+/* Notice / Feast */
+.accordion-btn {
+  background: white; border-radius: 14px;
+  margin: 0 16px 10px; padding: 16px;
+  display: flex; justify-content: space-between; align-items: center;
+  cursor: pointer; font-size: 15px; font-weight: 500; color: #1a1a1a;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  transition: background 0.15s;
+}
+.accordion-btn:hover { background: #f8f9ff; }
+.accordion-content {
+  background: white; margin: -8px 16px 10px;
+  border-radius: 0 0 14px 14px; padding: 0 16px 12px;
+  display: none;
+}
+.notice-item { padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+.notice-item:last-child { border-bottom: none; }
+.notice-hall { font-size: 12px; font-weight: 700; color: #2d6a4f; margin-bottom: 4px; }
+.notice-msg { font-size: 14px; color: #333; line-height: 1.5; }
+.notice-date { font-size: 11px; color: #aaa; margin-top: 4px; }
+
+/* Dashboard */
+.dash-header {
+  background: #2d6a4f; color: white; padding: 14px 20px 20px;
+}
+.dash-header h2 { font-size: 22px; font-weight: 700; line-height: 1.3; }
+.dash-header .role-label { font-size: 12px; opacity: 0.8; margin-top: 4px; }
+.dash-btn {
+  background: white; border-radius: 14px; margin: 0 16px 10px;
+  padding: 15px 18px; font-size: 15px; font-weight: 500;
+  cursor: pointer; color: #1a1a1a; transition: transform 0.1s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.dash-btn:active { transform: scale(0.98); }
+.dash-btn.primary-dash {
+  background: #2d6a4f; color: white; font-weight: 600;
+}
+
+/* Login */
+.login-form { padding: 16px; }
+.login-form h2 { font-size: 22px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+.login-form .role-sub { font-size: 12px; color: #888; margin-bottom: 20px; }
+.form-label { font-size: 13px; color: #555; margin-bottom: 6px; display: block; font-weight: 500; }
+.hall-chips { display: flex; gap: 8px; margin-bottom: 16px; }
+.hall-chip {
+  width: 46px; height: 46px; border-radius: 50%;
+  border: 1.5px solid #e0e0e0; display: flex; align-items: center;
+  justify-content: center; font-size: 12px; font-weight: 700;
+  cursor: pointer; color: #555; transition: all 0.15s;
+}
+.hall-chip.active { border-color: #2d6a4f; background: #d8ead2; color: #2d6a4f; }
+.form-input {
+  width: 100%; padding: 13px 14px; border-radius: 12px;
+  border: 1.5px solid #e0e0e0; font-size: 14px;
+  color: #333; background: white; margin-bottom: 14px;
+  outline: none; transition: border-color 0.15s;
+}
+.form-input:focus { border-color: #2d6a4f; }
+
+/* Success */
+.success-screen {
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; padding: 60px 24px 40px; min-height: 400px;
+}
+.success-icon {
+  width: 72px; height: 72px; border-radius: 50%; background: #4caf50;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 24px rgba(76,175,80,0.35);
+}
+.success-icon svg { width: 36px; height: 36px; fill: none; stroke: white; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.success-screen h2 { font-size: 24px; font-weight: 700; margin-bottom: 8px; color: #1a1a1a; }
+.success-screen p { font-size: 13px; color: #888; text-align: center; margin-bottom: 32px; line-height: 1.6; }
+
+.home-banner {
+  background: linear-gradient(135deg, #1b4332 0%, #40916c 100%);
+  color: white; padding: 14px 20px 22px;
+}
+.home-banner .logo-small {
+  width: 46px; height: 46px; background: rgba(255,255,255,0.22);
+  border-radius: 12px; display: flex; align-items: center;
+  justify-content: center; font-size: 16px; font-weight: 700; color: white;
+  margin-bottom: 12px;
+}
+.home-banner h1 { font-size: 20px; font-weight: 700; }
+.home-banner p { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+
+/* Home screen nav shortcuts */
+.quick-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; padding: 0 16px 12px;
+}
+.quick-btn {
+  background: white; border-radius: 14px; padding: 14px;
+  cursor: pointer; text-align: center; transition: transform 0.1s;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.quick-btn:active { transform: scale(0.97); }
+.quick-btn .q-icon { font-size: 22px; margin-bottom: 5px; }
+.quick-btn .q-label { font-size: 12px; font-weight: 600; color: #2d6a4f; }
+
+/* Home screen bottom */
+.app-footer {
+  text-align: center; font-size: 12px; color: #bbb; padding: 12px 16px 4px;
+}
+</style>
+</head>
+<body>
+<div class="outer">
+  <div class="label">HallMenu RU · Interactive Prototype</div>
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="status-bar">
+      <span>9:41</span>
+      <span>● ● ▲</span>
+    </div>
+    <div class="screen">
+
+      <!-- SPLASH -->
+      <div class="slide active" id="s-splash">
+        <div class="splash">
+          <div class="logo">RU</div>
+          <h1>HallMenu RU</h1>
+          <div class="sub">Daily menu • Availability • Feast</div>
+          <div class="dots">
+            <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+          </div>
+          <div style="flex:1;min-height:60px"></div>
+          <button class="btn-primary" onclick="go('s-onboard1')">Get Started</button>
+          <div class="splash-footer" style="margin-top:16px">Rajshahi University • Hall Dining</div>
+        </div>
+      </div>
+
+      <!-- ONBOARD 1 -->
+      <div class="slide" id="s-onboard1">
+        <div class="onboarding" style="min-height:660px">
+          <div class="skip-btn" onclick="go('s-home')">Skip</div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 0">
+            <div style="font-size:20px;font-weight:800;color:#2d6a4f;margin-bottom:12px;letter-spacing:1px">RU</div>
+            <h2>Welcome to HallMenu RU</h2>
+            <p>Your simple dining helper for Rajshahi University halls. Check meals and updates anytime from your phone.</p>
+          </div>
+          <div class="dots-row">
+            <div class="dot active"></div><div class="dot"></div><div class="dot"></div>
+          </div>
+          <button class="btn-primary" onclick="go('s-onboard2')">Next</button>
+          <div class="onboarding-footer">Rajshahi University • Hall Dining</div>
+        </div>
+      </div>
+
+      <!-- ONBOARD 2 -->
+      <div class="slide" id="s-onboard2">
+        <div class="onboarding" style="min-height:660px">
+          <div class="skip-btn" onclick="go('s-home')">Skip</div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <div class="onboard-icon">🍽️</div>
+            <h2>See Daily Meals</h2>
+            <p>View breakfast, lunch, and dinner menu easily. Know what is available before going to the dining hall.</p>
+          </div>
+          <div class="dots-row">
+            <div class="dot"></div><div class="dot active"></div><div class="dot"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-outline" onclick="go('s-onboard1')">Back</button>
+            <button class="btn-primary" style="width:55%" onclick="go('s-onboard3')">Next</button>
+          </div>
+          <div class="onboarding-footer">Rajshahi University • Hall Dining</div>
+        </div>
+      </div>
+
+      <!-- ONBOARD 3 -->
+      <div class="slide" id="s-onboard3">
+        <div class="onboarding" style="min-height:660px">
+          <div class="skip-btn" onclick="go('s-home')">Skip</div>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center">
+            <div class="onboard-icon">🔔</div>
+            <h2>Stay Updated</h2>
+            <p>Get updates about food availability, special feast menus, and important hall dining notices in one place.</p>
+          </div>
+          <div class="dots-row">
+            <div class="dot"></div><div class="dot"></div><div class="dot active"></div>
+          </div>
+          <div class="btn-row">
+            <button class="btn-outline" onclick="go('s-onboard2')">Back</button>
+            <button class="btn-primary" style="width:55%" onclick="go('s-home')">Get Started</button>
+          </div>
+          <div class="onboarding-footer">Rajshahi University • Hall Dining</div>
+        </div>
+      </div>
+
+      <!-- HOME -->
+      <div class="slide" id="s-home">
+        <div class="home-banner">
+          <div class="logo-small">RU</div>
+          <h1>HallMenu RU</h1>
+          <p>Check hall menu and food updates before you go.</p>
+        </div>
+        <div class="section-title">Choose Role</div>
+        <div class="role-card" onclick="go('s-halls')">
+          <div class="role-icon">🎓</div>
+          <div class="role-info">
+            <h3>Student</h3>
+            <p>View today's menu and food availability of different halls.</p>
+          </div>
+          <div class="role-arrow">›</div>
+        </div>
+        <div class="role-card" onclick="go('s-mod-select')">
+          <div class="role-icon">🛡️</div>
+          <div class="role-info">
+            <h3>Moderator</h3>
+            <p>Update daily menu, food status, and feast information.</p>
+          </div>
+          <div class="role-arrow">›</div>
+        </div>
+        <div class="app-footer">University of Rajshahi Hall Dining App</div>
+      </div>
+
+      <!-- HALLS LIST -->
+      <div class="slide" id="s-halls">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-home')">←</span>
+          <span class="title">Explore Halls</span>
+        </div>
+        <div style="padding:14px 16px 0">
+          <div style="font-size:20px;font-weight:700;color:#1a1a1a">Hall List</div>
+          <div style="font-size:13px;color:#888;margin-top:4px;margin-bottom:12px">Search halls, filter by type, check updates.</div>
+        </div>
+        <div class="search-bar">🔍 &nbsp;Search hall name</div>
+        <div class="filter-row">
+          <div class="filter-chip active">All</div>
+          <div class="filter-chip">Boys</div>
+          <div class="filter-chip">Girls</div>
+        </div>
+        <div style="display:flex;gap:10px;padding:0 16px 12px">
+          <div style="flex:1;background:white;border-radius:14px;padding:14px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.06)" onclick="go('s-feast')">
+            <div style="font-weight:700;color:#1a1a1a;font-size:14px">🍱 Feast</div>
+            <div style="color:#888;font-size:12px;margin-top:3px">See feast date, menu & price</div>
+          </div>
+          <div style="flex:1;background:white;border-radius:14px;padding:14px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,0.06)" onclick="go('s-notice')">
+            <div style="font-weight:700;color:#1a1a1a;font-size:14px">📢 Notice</div>
+            <div style="color:#888;font-size:12px;margin-top:3px">View hall dining updates</div>
+          </div>
+        </div>
+        <div class="section-title">Available Halls</div>
+        <div class="hall-card" onclick="go('s-menu-type')">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <h3 style="flex:1;padding-right:8px">Shaheed Habibur Rahman Hall</h3>
+            <span class="hall-badge badge-boys">BOYS</span>
+          </div>
+          <p>Tap to view today's dining and canteen menu</p>
+          <div class="hall-card-footer">
+            <span class="meal-types">Breakfast • Lunch • Dinner</span>
+            <span class="status-updated">Updated today</span>
+          </div>
+        </div>
+        <div class="hall-card" onclick="go('s-menu-type')">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <h3 style="flex:1;padding-right:8px">Shaheed Shamsuzzoha Hall</h3>
+            <span class="hall-badge badge-boys">BOYS</span>
+          </div>
+          <p>Tap to view today's dining and canteen menu</p>
+          <div class="hall-card-footer">
+            <span class="meal-types">Breakfast • Lunch • Dinner</span>
+            <span class="status-not">Not updated</span>
+          </div>
+        </div>
+        <div class="hall-card" onclick="go('s-menu-type')">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <h3>Rokeya Hall</h3>
+            <span class="hall-badge badge-girls">GIRLS</span>
+          </div>
+          <p>Tap to view today's dining and canteen menu</p>
+          <div class="hall-card-footer">
+            <span class="meal-types">Breakfast • Lunch • Dinner</span>
+            <span class="status-updated">Updated today</span>
+          </div>
+        </div>
+        <div class="hall-card" onclick="go('s-menu-type')">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <h3>Taposhi Rabeya Hall</h3>
+            <span class="hall-badge badge-girls">GIRLS</span>
+          </div>
+          <p>Tap to view today's dining and canteen menu</p>
+          <div class="hall-card-footer">
+            <span class="meal-types">Breakfast • Lunch • Dinner</span>
+            <span class="status-not">Not updated</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MENU TYPE SELECT -->
+      <div class="slide" id="s-menu-type">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-halls')">←</span>
+          <span class="title">Today's Menu</span>
+        </div>
+        <div class="hall-info-card">
+          <h2>শহীদ হাবিবুর রহমান হল</h2>
+          <div class="hall-meta">Hall ID: hb</div>
+          <div class="hall-meta">Date: 2026-03-12</div>
+          <div class="hall-meta">Last updated: 3/12/2026, 2:55 AM</div>
+        </div>
+        <div style="font-size:15px;font-weight:600;color:#1a1a1a;padding:4px 16px 10px">Select Menu Type</div>
+        <div class="menu-type-btn" onclick="go('s-dining-detail')">
+          <h3>Hall Dining</h3>
+          <p>See breakfast, lunch, and dinner menu</p>
+        </div>
+        <div class="menu-type-btn" onclick="go('s-canteen-detail')">
+          <h3>Hall Canteen</h3>
+          <p>See available canteen food items</p>
+        </div>
+        <div style="text-align:center;font-size:12px;color:#ccc;padding:24px">Tap any option to view menu details</div>
+      </div>
+
+      <!-- DINING DETAIL -->
+      <div class="slide" id="s-dining-detail">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-menu-type')">←</span>
+          <span class="title">Today's Menu</span>
+        </div>
+        <div class="hall-info-card">
+          <h2>শহীদ হাবিবুর রহমান হল</h2>
+          <div class="hall-meta">Hall ID: hb | Date: 2026-03-12</div>
+          <div class="hall-meta">Last updated: Not updated today</div>
+          <div class="hall-meta">Verified by: Not verified yet</div>
+        </div>
+        <div style="padding:0 0 8px">
+          <div style="font-size:14px;font-weight:600;color:#1a1a1a;padding:4px 16px 8px">Hall Dining</div>
+          <div class="meal-tabs">
+            <div class="meal-tab active">Breakfast</div>
+            <div class="meal-tab">Lunch</div>
+            <div class="meal-tab">Dinner</div>
+          </div>
+        </div>
+        <div class="meal-section">
+          <div class="meal-section-header">
+            <h3>Breakfast</h3>
+            <span class="meal-status status-finished">FINISHED</span>
+          </div>
+          <div class="meal-item">
+            <div>
+              <div class="meal-item-name">Vat</div>
+              <div class="meal-item-meta">৳10 • Remaining: 100</div>
+            </div>
+            <span class="meal-status status-available">AVAILABLE</span>
+          </div>
+          <div class="meal-item" style="border-radius:0 0 14px 14px">
+            <div>
+              <div class="meal-item-name">Dim</div>
+              <div class="meal-item-meta">৳20 • Remaining: 100</div>
+            </div>
+            <span class="meal-status status-low">LOW</span>
+          </div>
+          <div style="background:white;padding:10px 16px;border-top:1px solid #f5f5f5;border-radius:0 0 14px 14px;font-size:12px;color:#aaa">NOTE: Vat, Dim</div>
+        </div>
+        <div style="font-size:14px;font-weight:600;color:#1a1a1a;padding:4px 16px 8px">Hall Canteen</div>
+        <div class="meal-section">
+          <div class="meal-section-header">
+            <h3>Canteen</h3>
+            <span class="meal-status status-available">AVAILABLE</span>
+          </div>
+          <div class="meal-item">
+            <div>
+              <div class="meal-item-name">Briyani</div>
+              <div class="meal-item-meta">৳50 • Remaining: 70</div>
+            </div>
+            <span class="meal-status status-available">AVAILABLE</span>
+          </div>
+          <div class="meal-item" style="border-radius:0 0 14px 14px">
+            <div>
+              <div class="meal-item-name">Pizza</div>
+              <div class="meal-item-meta">৳100 • Remaining: 100</div>
+            </div>
+            <span class="meal-status status-low">LOW</span>
+          </div>
+          <div style="background:white;padding:10px 16px;border-top:1px solid #f5f5f5;border-radius:0 0 14px 14px;font-size:12px;color:#aaa">NOTE: Briyani, Pizza</div>
+        </div>
+      </div>
+
+      <!-- CANTEEN DETAIL -->
+      <div class="slide" id="s-canteen-detail">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-menu-type')">←</span>
+          <span class="title">Today's Menu</span>
+        </div>
+        <div class="hall-info-card">
+          <h2>শহীদ হাবিবুর রহমান হল</h2>
+          <div class="hall-meta">Hall Canteen | Date: 2026-03-12</div>
+        </div>
+        <div class="meal-section">
+          <div class="meal-section-header">
+            <h3>Hall Canteen</h3>
+            <span class="meal-status status-available">ACTIVE</span>
+          </div>
+          <div class="meal-item">
+            <div>
+              <div class="meal-item-name">Briyani</div>
+              <div class="meal-item-meta">৳50 • Remaining: 70</div>
+            </div>
+            <span class="meal-status status-available">AVAILABLE</span>
+          </div>
+          <div class="meal-item" style="border-radius:0 0 14px 14px">
+            <div>
+              <div class="meal-item-name">Dim</div>
+              <div class="meal-item-meta">৳20 • Remaining: 50</div>
+            </div>
+            <span class="meal-status status-low">LOW</span>
+          </div>
+          <div style="background:white;padding:10px 16px;border-top:1px solid #f5f5f5;border-radius:0 0 14px 14px;font-size:12px;color:#aaa">NOTE: Briyani, Dim</div>
+        </div>
+      </div>
+
+      <!-- NOTICE -->
+      <div class="slide" id="s-notice">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-halls')">←</span>
+          <span class="title">Notices</span>
+        </div>
+        <div style="padding:16px 16px 8px;font-size:20px;font-weight:700;color:#1a1a1a">Notice Updates</div>
+        <div class="accordion-btn" onclick="toggleAcc('acc-dn')">
+          <span>Dining Notices</span><span id="acc-dn-arrow" style="font-size:18px;color:#aaa">∨</span>
+        </div>
+        <div class="accordion-content" id="acc-dn">
+          <div class="notice-item">
+            <div class="notice-hall">শহীদ হাবিবুর রহমান হল</div>
+            <div class="notice-msg">Today's lunch will be served 30 minutes late due to kitchen maintenance.</div>
+            <div class="notice-date">10 March 2026</div>
+          </div>
+          <div class="notice-item">
+            <div class="notice-hall">রোকেয়া হল</div>
+            <div class="notice-msg">Dinner rice is limited today. Students are requested to come early.</div>
+            <div class="notice-date">11 March 2026</div>
+          </div>
+        </div>
+        <div class="accordion-btn" onclick="toggleAcc('acc-cn')">
+          <span>Canteen Notices</span><span id="acc-cn-arrow" style="font-size:18px;color:#aaa">∨</span>
+        </div>
+        <div class="accordion-content" id="acc-cn">
+          <div class="notice-item">
+            <div class="notice-hall">শহীদ শামসুজ্জোহা হল ক্যান্টিন</div>
+            <div class="notice-msg">Canteen will remain closed after 8 PM for cleaning work.</div>
+            <div class="notice-date">12 March 2026</div>
+          </div>
+          <div class="notice-item">
+            <div class="notice-hall">তাপসী রাবেয়া হল ক্যান্টিন</div>
+            <div class="notice-msg">Tea and snacks will be unavailable this evening due to supply shortage.</div>
+            <div class="notice-date">13 March 2026</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FEAST -->
+      <div class="slide" id="s-feast">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-halls')">←</span>
+          <span class="title">Feast</span>
+        </div>
+        <div style="padding:16px 16px 8px;font-size:20px;font-weight:700;color:#1a1a1a">Feast Updates</div>
+        <div class="accordion-btn" onclick="toggleAcc('acc-df')">
+          <span>Hall Dining Feast</span><span id="acc-df-arrow" style="font-size:18px;color:#aaa">∨</span>
+        </div>
+        <div class="accordion-content" id="acc-df">
+          <div class="notice-item">
+            <div class="notice-hall">শহীদ হাবিবুর রহমান হল</div>
+            <div class="notice-msg">Feast menu: Polao, roast, beef curry, salad, dessert.</div>
+            <div style="display:flex;justify-content:space-between;margin-top:5px">
+              <span class="notice-date">12 March 2026</span>
+              <span style="font-size:12px;color:#2d6a4f;font-weight:700">৳120</span>
+            </div>
+          </div>
+          <div class="notice-item">
+            <div class="notice-hall">রোকেয়া হল</div>
+            <div class="notice-msg">Feast menu: Khichuri, chicken fry, egg curry, vegetable, mishti.</div>
+            <div style="display:flex;justify-content:space-between;margin-top:5px">
+              <span class="notice-date">15 March 2026</span>
+              <span style="font-size:12px;color:#2d6a4f;font-weight:700">৳100</span>
+            </div>
+          </div>
+        </div>
+        <div class="accordion-btn" onclick="toggleAcc('acc-cf')">
+          <span>Hall Canteen Feast</span><span id="acc-cf-arrow" style="font-size:18px;color:#aaa">∨</span>
+        </div>
+        <div class="accordion-content" id="acc-cf">
+          <div class="notice-item">
+            <div class="notice-hall">শহীদ শামসুজ্জোহা হল ক্যান্টিন</div>
+            <div class="notice-msg">Feast menu: Fried rice, chicken grill, dal, soft drinks.</div>
+            <div style="display:flex;justify-content:space-between;margin-top:5px">
+              <span class="notice-date">18 March 2026</span>
+              <span style="font-size:12px;color:#2d6a4f;font-weight:700">৳150</span>
+            </div>
+          </div>
+          <div class="notice-item">
+            <div class="notice-hall">তাপসী রাবেয়া হল ক্যান্টিন</div>
+            <div class="notice-msg">Feast menu: Tehari, chicken roast, salad, jilapi.</div>
+            <div style="display:flex;justify-content:space-between;margin-top:5px">
+              <span class="notice-date">20 March 2026</span>
+              <span style="font-size:12px;color:#2d6a4f;font-weight:700">৳130</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODERATOR SELECT -->
+      <div class="slide" id="s-mod-select">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-home')">←</span>
+          <span class="title">Moderator</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:50px 24px">
+          <div style="font-size:24px;font-weight:700;color:#1a1a1a;margin-bottom:6px">Moderator</div>
+          <div style="font-size:13px;color:#888;margin-bottom:40px">Select your responsibility</div>
+          <button class="btn-primary" onclick="go('s-mod-login-dining')">Dining Moderator</button>
+          <button class="btn-secondary" onclick="go('s-mod-login-canteen')">Canteen Moderator</button>
+          <div style="font-size:13px;color:#2d6a4f;margin-top:20px;cursor:pointer" onclick="go('s-home')">← Back</div>
+        </div>
+      </div>
+
+      <!-- MOD LOGIN DINING -->
+      <div class="slide" id="s-mod-login-dining">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-mod-select')">←</span>
+          <span class="title">Moderator Login</span>
+        </div>
+        <div class="login-form">
+          <h2>Dining Moderator Login</h2>
+          <div class="role-sub">Role locked: DINING</div>
+          <label class="form-label">Select Hall</label>
+          <div class="hall-chips">
+            <div class="hall-chip active">HB</div>
+            <div class="hall-chip">SZ</div>
+            <div class="hall-chip">RG</div>
+          </div>
+          <label class="form-label">Phone</label>
+          <input class="form-input" type="text" placeholder="017xxxxxxxx">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" placeholder="••••">
+          <button class="btn-primary" onclick="go('s-dash-dining')">Login</button>
+          <div style="font-size:13px;color:#2d6a4f;text-align:center;margin-top:16px;cursor:pointer" onclick="go('s-mod-select')">← Back</div>
+        </div>
+      </div>
+
+      <!-- MOD LOGIN CANTEEN -->
+      <div class="slide" id="s-mod-login-canteen">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-mod-select')">←</span>
+          <span class="title">Moderator Login</span>
+        </div>
+        <div class="login-form">
+          <h2>Canteen Moderator Login</h2>
+          <div class="role-sub">Role locked: CANTEEN</div>
+          <label class="form-label">Select Hall</label>
+          <div class="hall-chips">
+            <div class="hall-chip active">HB</div>
+            <div class="hall-chip">SZ</div>
+            <div class="hall-chip">RG</div>
+          </div>
+          <label class="form-label">Phone</label>
+          <input class="form-input" type="text" placeholder="017xxxxxxxx">
+          <label class="form-label">Password</label>
+          <input class="form-input" type="password" placeholder="••••">
+          <button class="btn-primary" onclick="go('s-dash-canteen')">Login</button>
+          <div style="font-size:13px;color:#2d6a4f;text-align:center;margin-top:16px;cursor:pointer" onclick="go('s-mod-select')">← Back</div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD DINING -->
+      <div class="slide" id="s-dash-dining">
+        <div class="dash-header" style="padding:16px 20px 22px">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <h2 style="font-size:20px">Shaheed Habibur<br>Rahman Hall</h2>
+              <div class="role-label">Hall: shaheed_habibur • Role: Dining Moderator</div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:8px">
+                <span style="background:rgba(255,255,255,0.22);border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;letter-spacing:0.3px">🧑‍💼 Dining Moderator</span>
+              </div>
+              <div style="font-size:12px;opacity:0.75;margin-top:5px">📅 2026-03-30</div>
+            </div>
+            <button onclick="showLogout('dining')" style="background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.35);color:white;border-radius:10px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap">⏻ Logout</button>
+          </div>
+        </div>
+        <div style="height:12px"></div>
+        <div class="dash-btn primary-dash" onclick="go('s-quick-update')" style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">⚡</span>
+          <div><div style="font-size:15px;font-weight:600">Quick Status (Item-wise)</div><div style="font-size:12px;opacity:0.8;margin-top:1px">Quickly update food availability status</div></div>
+          <span style="margin-left:auto;opacity:0.6">›</span>
+        </div>
+        <div class="dash-btn" onclick="go('s-update-menu')" style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">🍽️</span>
+          <div><div style="font-size:15px;font-weight:600">Update Dining Menu</div><div style="font-size:12px;color:#888;margin-top:1px">Add or edit today's full dining menu</div></div>
+          <span style="margin-left:auto;color:#ccc">›</span>
+        </div>
+        <div class="dash-btn" onclick="go('s-post-notice')" style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">📢</span>
+          <div><div style="font-size:15px;font-weight:600">Post Notice</div><div style="font-size:12px;color:#888;margin-top:1px">Announce delays, changes or updates</div></div>
+          <span style="margin-left:auto;color:#ccc">›</span>
+        </div>
+        <div class="dash-btn" onclick="go('s-add-feast')" style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">🎉</span>
+          <div><div style="font-size:15px;font-weight:600">Add Feast</div><div style="font-size:12px;color:#888;margin-top:1px">Schedule a special feast event</div></div>
+          <span style="margin-left:auto;color:#ccc">›</span>
+        </div>
+        <div class="dash-btn" onclick="go('s-daily-reset')" style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">🔄</span>
+          <div><div style="font-size:15px;font-weight:600">Daily Reset</div><div style="font-size:12px;color:#888;margin-top:1px">Duplicate yesterday or clear for today</div></div>
+          <span style="margin-left:auto;color:#ccc">›</span>
+        </div>
+        <div class="dash-btn" onclick="go('s-verification')" style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px;background:#4caf50;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0">✔️</span>
+          <div><div style="font-size:15px;font-weight:600">Verification</div><div style="font-size:12px;color:#888;margin-top:1px">View update history and verify records</div></div>
+          <span style="margin-left:auto;color:#ccc">›</span>
+        </div>
+        <div style="height:4px"></div>
+        <div class="dash-btn" onclick="go('s-home')" style="display:flex;align-items:center;gap:12px;justify-content:center;color:#555">
+          <span style="font-size:16px">🏠</span>
+          <span style="font-size:15px;font-weight:600">Back to Home</span>
+        </div>
+        <div style="text-align:center;padding:8px 0 12px">
+          <span onclick="showLogout('dining')" style="color:#e53935;font-size:14px;font-weight:600;cursor:pointer">Logout</span>
+        </div>
+      </div>
+
+      <!-- DASHBOARD CANTEEN -->
+      <div class="slide" id="s-dash-canteen">
+        <div class="dash-header" style="padding:16px 20px 22px;background:linear-gradient(135deg,#2d6a4f,#7e57c2)">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start">
+            <div>
+              <h2 style="font-size:20px">Shaheed Habibur<br>Rahman Hall</h2>
+              <div class="role-label">Hall: shaheed_habibur • Role: Canteen Moderator</div>
+              <div style="display:flex;align-items:center;gap:6px;margin-top:8px">
+                <span style="background:rgba(255,255,255,0.22);border-radius:8px;padding:3px 10px;font-size:12px;font-weight:700;letter-spacing:0.3px">🧑‍🍳 Canteen Moderator</span>
+              </div>
+              <div style="font-size:12px;opacity:0.75;margin-top:5px">📅 2026-03-30</div>
+            </div>
+            <button onclick="showLogout('canteen')" style="background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.35);color:white;border-radius:10px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap">⏻ Logout</button>
+          </div>
+        </div>
+        <div style="height:12px"></div>
+        <div class="dash-btn primary-dash" onclick="go('s-quick-canteen')" style="display:flex;align-items:center;gap:12px;background:linear-gradient(135deg,#2d6a4f,#7e57c2)">
+          <span style="font-size:20px">⚡</span>
+          <div><div style="font-size:15px;font-weight:600">Quick Canteen Status (Item-wise)</div><div style="font-size:12px;opacity:0.8;margin-top:1px">Quickly update canteen availability</div></div>
+          <span style="margin-left:auto;opacity:0.6">›</span>
+        </div>
+        <div class="dash-btn" onclick="go('s-update-canteen')" style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">🛒</span>
+          <div><div style="font-size:15px;font-weight:600">Update Canteen Menu</div><div style="font-size:12px;color:#888;margin-top:1px">Add or edit today's canteen items</div></div>
+          <span style="margin-left:auto;color:#ccc">›</span>
+        </div>
+        <div class="dash-btn" onclick="go('s-post-notice')" style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">📢</span>
+          <div><div style="font-size:15px;font-weight:600">Post Notice</div><div style="font-size:12px;color:#888;margin-top:1px">Announce delays, changes or updates</div></div>
+          <span style="margin-left:auto;color:#ccc">›</span>
+        </div>
+        <div class="dash-btn" onclick="go('s-add-feast')" style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">🎉</span>
+          <div><div style="font-size:15px;font-weight:600">Add Feast</div><div style="font-size:12px;color:#888;margin-top:1px">Schedule a special feast event</div></div>
+          <span style="margin-left:auto;color:#ccc">›</span>
+        </div>
+        <div class="dash-btn" onclick="go('s-daily-reset')" style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px">🔄</span>
+          <div><div style="font-size:15px;font-weight:600">Daily Reset</div><div style="font-size:12px;color:#888;margin-top:1px">Duplicate yesterday or clear for today</div></div>
+          <span style="margin-left:auto;color:#ccc">›</span>
+        </div>
+        <div class="dash-btn" onclick="go('s-verification')" style="display:flex;align-items:center;gap:12px">
+          <span style="font-size:20px;background:#4caf50;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;flex-shrink:0">✔️</span>
+          <div><div style="font-size:15px;font-weight:600">Verification</div><div style="font-size:12px;color:#888;margin-top:1px">View update history and verify records</div></div>
+          <span style="margin-left:auto;color:#ccc">›</span>
+        </div>
+        <div style="height:4px"></div>
+        <div class="dash-btn" onclick="go('s-home')" style="display:flex;align-items:center;gap:12px;justify-content:center;color:#555">
+          <span style="font-size:16px">🏠</span>
+          <span style="font-size:15px;font-weight:600">Back to Home</span>
+        </div>
+        <div style="text-align:center;padding:8px 0 12px">
+          <span onclick="showLogout('canteen')" style="color:#e53935;font-size:14px;font-weight:600;cursor:pointer">Logout</span>
+        </div>
+      </div>
+
+      <!-- QUICK UPDATE -->
+      <div class="slide" id="s-quick-update">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-dash-dining')">←</span>
+          <span class="title">Quick Update</span>
+        </div>
+        <div style="padding:16px 16px 4px;font-size:18px;font-weight:700;color:#1a1a1a">Quick Status Update (Item-wise)</div>
+        <div style="padding:0 16px 12px;font-size:12px;color:#888">Hall: hb • Date: 2026-03-12</div>
+        <div class="card">
+          <div style="font-size:15px;font-weight:600;margin-bottom:10px">Breakfast</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+            <span class="filter-chip active">All Available</span>
+            <span class="filter-chip">All Low</span>
+            <span class="filter-chip">All Finished</span>
+          </div>
+          <div style="border-top:1px solid #f0f0f0;padding-top:12px">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+              <div><div style="font-size:14px;font-weight:500">Vat</div><div style="font-size:11px;color:#aaa">Count: 100</div></div>
+              <div style="display:flex;gap:5px">
+                <span class="filter-chip active" style="padding:4px 10px;font-size:12px">Available</span>
+                <span class="filter-chip" style="padding:4px 10px;font-size:12px">Low</span>
+                <span class="filter-chip" style="padding:4px 10px;font-size:12px">Finished</span>
+              </div>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center">
+              <div><div style="font-size:14px;font-weight:500">Dim</div><div style="font-size:11px;color:#aaa">Count: 80</div></div>
+              <div style="display:flex;gap:5px">
+                <span class="filter-chip" style="padding:4px 10px;font-size:12px">Available</span>
+                <span class="filter-chip active" style="padding:4px 10px;font-size:12px">Low</span>
+                <span class="filter-chip" style="padding:4px 10px;font-size:12px">Finished</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-size:15px;font-weight:600;margin-bottom:10px">Lunch</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
+            <span class="filter-chip">All Available</span>
+            <span class="filter-chip">All Low</span>
+            <span class="filter-chip">All Finished</span>
+          </div>
+          <div style="font-size:12px;color:#aaa;padding-top:8px">No items yet. Add items from Menu Editor first.</div>
+        </div>
+        <div style="padding:0 16px 20px">
+          <button class="btn-primary" onclick="go('s-success')">Save Updates</button>
+        </div>
+      </div>
+
+      <!-- UPDATE MENU -->
+      <div class="slide" id="s-update-menu">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-dash-dining')">←</span>
+          <span class="title">Update Menu</span>
+        </div>
+        <div style="padding:16px 16px 4px;font-size:18px;font-weight:700;color:#1a1a1a">Update Today Menu (Item-wise)</div>
+        <div style="padding:0 16px 12px;font-size:12px;color:#888">Hall: hb • Date: 2026-03-12</div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div style="font-size:15px;font-weight:600">Breakfast</div>
+            <span class="filter-chip" style="color:#2d6a4f;border-color:#2d6a4f">+ Add item</span>
+          </div>
+          <div style="font-size:13px;color:#aaa">No items yet</div>
+        </div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div style="font-size:15px;font-weight:600">Lunch</div>
+            <span class="filter-chip" style="color:#2d6a4f;border-color:#2d6a4f">+ Add item</span>
+          </div>
+          <div style="font-size:13px;color:#aaa">No items yet</div>
+        </div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div style="font-size:15px;font-weight:600">Dinner</div>
+            <span class="filter-chip" style="color:#2d6a4f;border-color:#2d6a4f">+ Add item</span>
+          </div>
+          <div style="font-size:13px;color:#aaa">No items yet</div>
+        </div>
+        <div style="padding:0 16px 20px">
+          <button class="btn-secondary" style="margin-bottom:10px" onclick="go('s-preview')">Preview</button>
+          <button class="btn-primary" onclick="go('s-success')">Save Menu</button>
+        </div>
+      </div>
+
+      <!-- QUICK CANTEEN -->
+      <div class="slide" id="s-quick-canteen">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-dash-canteen')">←</span>
+          <span class="title">Quick Canteen Update</span>
+        </div>
+        <div style="padding:16px 16px 4px;font-size:18px;font-weight:700;color:#1a1a1a">Quick Canteen Status (Item-wise)</div>
+        <div style="padding:0 16px 12px;font-size:12px;color:#888">Hall: hb • Date: 2026-03-12</div>
+        <div class="card">
+          <div style="font-size:15px;font-weight:600;margin-bottom:10px">Canteen Items</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+            <span class="filter-chip active">All Available</span>
+            <span class="filter-chip">All Low</span>
+            <span class="filter-chip">All Finished</span>
+          </div>
+          <div style="border-top:1px solid #f0f0f0;padding-top:12px">
+            <div style="margin-bottom:14px">
+              <div style="font-size:14px;font-weight:500;margin-bottom:5px">Briyani <span style="font-size:11px;color:#aaa;font-weight:400">৳50</span></div>
+              <input class="form-input" style="padding:8px 12px;margin-bottom:6px" value="70" placeholder="Count">
+              <div style="display:flex;gap:6px">
+                <span class="filter-chip active" style="padding:4px 10px;font-size:12px">Available</span>
+                <span class="filter-chip" style="padding:4px 10px;font-size:12px">Low</span>
+                <span class="filter-chip" style="padding:4px 10px;font-size:12px">Finished</span>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:14px;font-weight:500;margin-bottom:5px">Dim <span style="font-size:11px;color:#aaa;font-weight:400">৳20</span></div>
+              <input class="form-input" style="padding:8px 12px;margin-bottom:6px" value="50" placeholder="Count">
+              <div style="display:flex;gap:6px">
+                <span class="filter-chip" style="padding:4px 10px;font-size:12px">Available</span>
+                <span class="filter-chip active" style="padding:4px 10px;font-size:12px">Low</span>
+                <span class="filter-chip" style="padding:4px 10px;font-size:12px">Finished</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="padding:0 16px 20px">
+          <button class="btn-primary" onclick="go('s-success')">Save Updates</button>
+        </div>
+      </div>
+
+      <!-- UPDATE CANTEEN -->
+      <div class="slide" id="s-update-canteen">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-dash-canteen')">←</span>
+          <span class="title">Update Canteen Menu</span>
+        </div>
+        <div style="padding:16px 16px 4px;font-size:18px;font-weight:700;color:#1a1a1a">Update Canteen Menu (Item-wise)</div>
+        <div style="padding:0 16px 12px;font-size:12px;color:#888">Hall: hb • Date: 2026-03-12</div>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <div style="font-size:15px;font-weight:600">Canteen</div>
+            <span class="filter-chip" style="color:#2d6a4f;border-color:#2d6a4f">+ Add item</span>
+          </div>
+          <div style="font-size:13px;color:#aaa">No items yet</div>
+        </div>
+        <div style="padding:0 16px 20px">
+          <button class="btn-secondary" style="margin-bottom:10px">Preview</button>
+          <button class="btn-primary" onclick="go('s-success')">Save Canteen Menu</button>
+        </div>
+      </div>
+
+      <!-- POST NOTICE -->
+      <div class="slide" id="s-post-notice">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-dash-dining')">←</span>
+          <span class="title">Post Notice</span>
+        </div>
+        <div class="login-form">
+          <h2>Post Notice</h2>
+          <div class="role-sub">Hall: hb • Dining</div>
+          <label class="form-label">Type</label>
+          <input class="form-input" value="delay">
+          <label class="form-label">Title</label>
+          <input class="form-input" placeholder="Enter notice title">
+          <label class="form-label">Message</label>
+          <textarea class="form-input" style="height:80px;resize:none"></textarea>
+          <label class="form-label">Expires in (hours)</label>
+          <input class="form-input" value="6">
+          <button class="btn-secondary" style="margin-bottom:10px">Edit Notice</button>
+          <button class="btn-primary" onclick="go('s-success')">Post Notice</button>
+        </div>
+      </div>
+
+      <!-- ADD FEAST -->
+      <div class="slide" id="s-add-feast">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-dash-dining')">←</span>
+          <span class="title">Add Feast</span>
+        </div>
+        <div class="login-form">
+          <h2>Add Feast</h2>
+          <div class="role-sub">Hall: hb • Dining</div>
+          <label class="form-label">Date (YYYY-MM-DD)</label>
+          <input class="form-input" value="2026-03-10">
+          <label class="form-label">Title</label>
+          <input class="form-input" value="Briyani Feast">
+          <label class="form-label">Time Range</label>
+          <input class="form-input" value="8:00 PM - 9:00 PM">
+          <label class="form-label">Menu</label>
+          <textarea class="form-input" style="height:70px;resize:none" placeholder="Enter feast menu items..."></textarea>
+          <label class="form-label">Price</label>
+          <input class="form-input" value="120">
+          <button class="btn-secondary" style="margin-bottom:10px">Edit Feast</button>
+          <button class="btn-primary" onclick="go('s-success')">Save Feast</button>
+        </div>
+      </div>
+
+      <!-- DAILY RESET -->
+      <div class="slide" id="s-daily-reset">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-dash-dining')">←</span>
+          <span class="title">Daily Reset</span>
+        </div>
+        <div style="padding:16px 16px 4px;font-size:22px;font-weight:700;color:#1a1a1a">Start New Day</div>
+        <div style="padding:0 16px 20px;font-size:12px;color:#888">Hall: hb • Date: 2026-03-13</div>
+        <div class="card" style="margin-bottom:12px">
+          <div style="font-size:16px;font-weight:600;margin-bottom:6px">Duplicate Yesterday Menu</div>
+          <div style="font-size:13px;color:#888;margin-bottom:14px">Copy yesterday's menu as a starting point for today.</div>
+          <button class="btn-primary" onclick="go('s-success')">Duplicate Yesterday</button>
+        </div>
+        <div class="card">
+          <div style="font-size:16px;font-weight:600;margin-bottom:6px">Clear All For Today</div>
+          <div style="font-size:13px;color:#888;margin-bottom:14px">Remove all previous menu items and start with an empty menu.</div>
+          <button style="width:100%;padding:14px;background:#fff3f3;color:#e53935;border:1.5px solid #ffcdd2;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer">Clear Everything</button>
+        </div>
+      </div>
+
+      <!-- VERIFICATION -->
+      <div class="slide" id="s-verification">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-dash-dining')">←</span>
+          <span class="title">Verification</span>
+        </div>
+        <div style="padding:16px 16px 4px;font-size:20px;font-weight:700;color:#1a1a1a">Verification Details</div>
+        <div style="padding:0 16px 12px;font-size:12px;color:#888">Hall: hb • Dining • Date: 2026-03-12</div>
+        <div class="card" style="margin-bottom:12px">
+          <div style="font-size:15px;font-weight:600;margin-bottom:12px">Current Record</div>
+          <table style="width:100%;font-size:13px;border-collapse:collapse">
+            <tr><td style="color:#888;padding:5px 0">Updated by</td><td style="text-align:right;font-weight:500">Abir Hasan</td></tr>
+            <tr><td style="color:#888;padding:5px 0">Role</td><td style="text-align:right;font-weight:500">Dining Moderator</td></tr>
+            <tr><td style="color:#888;padding:5px 0">Last updated</td><td style="text-align:right;font-weight:500">12 Mar 2026, 2:55 AM</td></tr>
+            <tr><td style="color:#888;padding:5px 0">Status</td><td style="text-align:right"><span style="background:#fff8e1;color:#f57f17;padding:3px 10px;border-radius:8px;font-size:11px;font-weight:600">Pending</span></td></tr>
+          </table>
+        </div>
+        <div class="card">
+          <div style="font-size:15px;font-weight:600;margin-bottom:12px">Update History</div>
+          <div style="border:1px solid #f0f0f0;border-radius:10px;padding:12px;margin-bottom:8px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="font-size:13px;font-weight:600">Abir Hasan</span>
+              <span style="font-size:11px;color:#aaa">12 Mar 2026, 2:55 AM</span>
+            </div>
+            <div style="font-size:12px;color:#666;line-height:1.5">Updated lunch items and changed item status.</div>
+          </div>
+          <div style="border:1px solid #f0f0f0;border-radius:10px;padding:12px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+              <span style="font-size:13px;font-weight:600">Nafis Ahmed</span>
+              <span style="font-size:11px;color:#aaa">11 Mar 2026, 9:10 PM</span>
+            </div>
+            <div style="font-size:12px;color:#666;line-height:1.5">Added dinner menu and saved remaining quantity.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PREVIEW -->
+      <div class="slide" id="s-preview">
+        <div class="app-header">
+          <span class="back-btn" onclick="go('s-update-menu')">←</span>
+          <span class="title">Preview</span>
+        </div>
+        <div style="padding:16px 16px 4px;font-size:18px;font-weight:700;color:#1a1a1a">Preview Before Save</div>
+        <div style="padding:0 16px 12px;font-size:12px;color:#888">Student side preview</div>
+        <div class="hall-info-card">
+          <h2>Shaheed Habibur Rahman Hall</h2>
+          <div class="hall-meta">Date: 2026-03-12 | Preview mode before save</div>
+        </div>
+        <div class="meal-section">
+          <div class="meal-section-header">
+            <h3>Lunch</h3><span style="font-size:11px;color:#888">12:30 PM - 2:30 PM</span>
+          </div>
+          <div class="meal-item">
+            <div><div class="meal-item-name">Briyani</div><div class="meal-item-meta">৳50 • Remaining: 100</div></div>
+            <span class="meal-status status-available">AVAILABLE</span>
+          </div>
+          <div class="meal-item" style="border-radius:0 0 14px 14px">
+            <div><div class="meal-item-name">Achar</div><div class="meal-item-meta">৳5 • Remaining: 60</div></div>
+            <span class="meal-status status-low">LOW</span>
+          </div>
+          <div style="background:white;padding:10px 16px;border-top:1px solid #f5f5f5;border-radius:0 0 14px 14px;font-size:12px;color:#aaa">NOTE: Briyani, Achar</div>
+        </div>
+        <div style="padding:0 16px;display:flex;gap:10px">
+          <button class="btn-outline" onclick="go('s-update-menu')">Back to Edit</button>
+          <button class="btn-primary" style="width:55%" onclick="go('s-success')">Confirm Save</button>
+        </div>
+      </div>
+
+      <!-- SUCCESS -->
+      <div class="slide" id="s-success">
+        <div style="background:white;margin:20px 16px;border-radius:16px;padding:30px 24px;box-shadow:0 1px 8px rgba(0,0,0,0.08)">
+          <div class="success-screen" style="padding:20px 0 10px">
+            <div class="success-icon">
+              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <h2>Success</h2>
+            <p>Menu saved successfully. Students can now see the updated information.</p>
+            <button class="btn-primary" onclick="go('s-dash-dining')">Back to Dashboard</button>
+            <button class="btn-secondary" onclick="go('s-update-menu')">Edit Again</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOGOUT CONFIRM MODAL -->
+      <div id="logout-modal" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,0.45);z-index:999;align-items:flex-end;justify-content:center">
+        <div style="background:white;border-radius:22px 22px 0 0;padding:24px 20px 32px;width:100%;box-shadow:0 -4px 24px rgba(0,0,0,0.15)">
+          <div style="text-align:center;margin-bottom:18px">
+            <div style="font-size:38px;margin-bottom:8px">👋</div>
+            <div style="font-size:18px;font-weight:700;color:#1a1a1a">Logout করবেন?</div>
+            <div style="font-size:13px;color:#888;margin-top:4px">আপনি কি সত্যিই logout করতে চান?</div>
+          </div>
+          <button onclick="confirmLogout()" style="width:100%;padding:15px;background:#e53935;color:white;border:none;border-radius:14px;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:10px">✓ হ্যাঁ, Logout করুন</button>
+          <button onclick="hideLogout()" style="width:100%;padding:14px;background:#f2f2f7;color:#333;border:none;border-radius:14px;font-size:15px;font-weight:600;cursor:pointer">বাতিল করুন</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="label" style="font-size:11px">Click any button to navigate • Scroll inside phone to see more</div>
+</div>
+
+<script>
+var _logoutFrom = '';
+function showLogout(role) {
+  _logoutFrom = role;
+  var m = document.getElementById('logout-modal');
+  m.style.display = 'flex';
+}
+function hideLogout() {
+  document.getElementById('logout-modal').style.display = 'none';
+}
+function confirmLogout() {
+  hideLogout();
+  go('s-mod-select');
+}
+function go(id) {
+  document.querySelectorAll('.slide').forEach(function(s){ s.classList.remove('active'); });
+  var el = document.getElementById(id);
+  if (el) { el.classList.add('active'); el.scrollTop = 0; }
+}
+function toggleAcc(id) {
+  var el = document.getElementById(id);
+  var arrow = document.getElementById(id + '-arrow');
+  if (el.style.display === 'block') {
+    el.style.display = 'none';
+    if (arrow) arrow.textContent = '∨';
+  } else {
+    el.style.display = 'block';
+    if (arrow) arrow.textContent = '∧';
+  }
+}
+</script>
+</body>
+</html>
