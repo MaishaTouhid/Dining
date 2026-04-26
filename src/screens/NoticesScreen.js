@@ -11,9 +11,9 @@ import { formatTime } from '../data/date';
 const TYPE_CONFIG = {
   delay:    { icon: '⏰', color: '#f59e0b', bg: '#fffbeb' },
   shortage: { icon: '⚠️', color: '#ef4444', bg: '#fef2f2' },
-  closure:  { icon: '🔒', color: '#6b7280', bg: '#f9fafb' },
-  update:   { icon: '📋', color: '#3b82f6', bg: '#eff6ff' },
-  other:    { icon: '📌', color: '#8b5cf6', bg: '#f5f3ff' },
+  closure:  { icon: '🔒', color: '#6b7280', bg: '#f0ede6' },
+  update:   { icon: '📋', color: '#2d5a3d', bg: '#e8ede9' },
+  other:    { icon: '📌', color: '#7a5c3d', bg: '#f5ede4' },
 };
 
 function isNoticeExpired(notice) {
@@ -44,7 +44,6 @@ export default function NoticesScreen() {
       getNotices('dining'),
       getNotices('canteen'),
     ]);
-    // Auto-hide expired notices
     const filterActive = (list) => list.filter(n => !isNoticeExpired(n));
     setDiningNotices(filterActive(d));
     setCanteenNotices(filterActive(c));
@@ -102,7 +101,7 @@ export default function NoticesScreen() {
         <Text style={styles.pageSub}>Showing active notices only</Text>
 
         {loading ? (
-          <ActivityIndicator color="#6e96eb" style={{ marginTop: 40 }} />
+          <ActivityIndicator color="#2d5a3d" style={{ marginTop: 40 }} />
         ) : (
           SECTIONS.map(section => (
             <View key={section.key} style={styles.section}>
@@ -142,40 +141,40 @@ export default function NoticesScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F7FB' },
+  container: { flex: 1, backgroundColor: '#edeae3' },
   scroll: { padding: 16, paddingBottom: 40 },
-  pageTitle: { fontSize: 22, fontWeight: '800', color: '#1a1a2e', marginBottom: 4 },
-  pageSub: { fontSize: 12, color: '#9ca3af', marginBottom: 16 },
+  pageTitle: { fontSize: 22, fontWeight: '800', color: '#1a1a1a', marginBottom: 4 },
+  pageSub: { fontSize: 12, color: '#7a7a6e', marginBottom: 16 },
 
   section: {
-    backgroundColor: '#fff', borderRadius: 14,
-    marginBottom: 10, borderWidth: 1, borderColor: '#e5e7eb', overflow: 'hidden',
+    backgroundColor: '#f5f2eb', borderRadius: 14,
+    marginBottom: 10, borderWidth: 1, borderColor: '#d8d4c8', overflow: 'hidden',
   },
   sectionHeader: {
     flexDirection: 'row', alignItems: 'center',
     justifyContent: 'space-between', padding: 16,
   },
-  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#1a1a2e' },
+  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#1a1a1a' },
   sectionRight: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   countBadge: {
-    backgroundColor: '#6e96eb', borderRadius: 10,
+    backgroundColor: '#2d5a3d', borderRadius: 10,
     paddingHorizontal: 7, paddingVertical: 2,
   },
   countBadgeText: { fontSize: 11, fontWeight: '800', color: '#fff' },
-  chevron: { fontSize: 14, color: '#9ca3af', fontWeight: '700' },
+  chevron: { fontSize: 14, color: '#7a7a6e', fontWeight: '700' },
 
   sectionBody: {
     paddingHorizontal: 14, paddingBottom: 14,
-    borderTopWidth: 1, borderTopColor: '#f3f4f6',
+    borderTopWidth: 1, borderTopColor: '#e8e4dc',
   },
 
   emptyBox: { alignItems: 'center', paddingVertical: 24 },
   emptyIcon: { fontSize: 32, marginBottom: 8 },
-  emptyText: { fontSize: 13, color: '#9ca3af' },
+  emptyText: { fontSize: 13, color: '#7a7a6e' },
 
   noticeCard: {
     paddingVertical: 14,
-    borderBottomWidth: 1, borderBottomColor: '#f3f4f6',
+    borderBottomWidth: 1, borderBottomColor: '#e8e4dc',
   },
   typeBadge: {
     flexDirection: 'row', alignItems: 'center', gap: 5,
@@ -186,14 +185,14 @@ const styles = StyleSheet.create({
   typeBadgeIcon: { fontSize: 11 },
   typeBadgeText: { fontSize: 10, fontWeight: '800' },
 
-  noticeHall: { fontSize: 13, fontWeight: '700', color: '#1a1a2e', marginBottom: 2 },
-  noticeTitle: { fontSize: 14, fontWeight: '800', color: '#1a1a2e', marginBottom: 4 },
+  noticeHall: { fontSize: 13, fontWeight: '700', color: '#1a1a1a', marginBottom: 2 },
+  noticeTitle: { fontSize: 14, fontWeight: '800', color: '#1a1a1a', marginBottom: 4 },
   noticeMsg: { fontSize: 13, color: '#4b5563', lineHeight: 18, marginBottom: 8 },
   noticeFooter: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
   },
-  noticeDate: { fontSize: 11, color: '#6e96eb', fontWeight: '600' },
-  noticeExpiry: { fontSize: 11, color: '#9ca3af' },
+  noticeDate: { fontSize: 11, color: '#2d5a3d', fontWeight: '600' },
+  noticeExpiry: { fontSize: 11, color: '#7a7a6e' },
 
-  tapHint: { textAlign: 'center', fontSize: 12, color: '#9ca3af', marginTop: 24 },
+  tapHint: { textAlign: 'center', fontSize: 12, color: '#7a7a6e', marginTop: 24 },
 });

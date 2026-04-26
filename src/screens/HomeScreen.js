@@ -69,12 +69,12 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F7FB' },
+  container: { flex: 1, backgroundColor: '#edeae3' },
   scroll: { padding: 20, paddingBottom: 40 },
 
   // Top card
   topCard: {
-    backgroundColor: '#6e96eb',
+    backgroundColor: '#2d5a3d',
     borderRadius: 20,
     padding: 24,
     marginBottom: 28,
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
   logoBox: {
     width: 52, height: 52,
     borderRadius: 14,
-    backgroundColor: 'rgba(255,255,255,0.25)',
+    backgroundColor: 'rgba(255,255,255,0.2)',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 14,
@@ -103,54 +103,54 @@ const styles = StyleSheet.create({
   // Section
   sectionTitle: {
     fontSize: 16, fontWeight: '800',
-    color: '#1a1a2e', marginBottom: 12,
+    color: '#1a1a1a', marginBottom: 12,
   },
 
   // Role cards
   roleCard: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f2eb',
     borderRadius: 16,
     padding: 16,
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: '#e8eaf0',
+    borderColor: '#d8d4c8',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
+    shadowOpacity: 0.04,
     shadowRadius: 8,
     elevation: 2,
   },
   roleIcon: {
     width: 48, height: 48,
     borderRadius: 14,
-    backgroundColor: '#eef2ff',
+    backgroundColor: '#e8ede9',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 14,
   },
   roleIconMod: {
-    backgroundColor: '#fef3e8',
+    backgroundColor: '#f0ede6',
   },
   roleIconText: { fontSize: 22 },
   roleInfo: { flex: 1 },
   roleName: {
     fontSize: 16, fontWeight: '800',
-    color: '#1a1a2e', marginBottom: 4,
+    color: '#1a1a1a', marginBottom: 4,
   },
   roleDesc: {
-    fontSize: 13, color: '#6b7280',
+    fontSize: 13, color: '#6b6b60',
     lineHeight: 18,
   },
   roleArrow: {
-    fontSize: 24, color: '#6e96eb',
+    fontSize: 24, color: '#2d5a3d',
     fontWeight: '700', marginLeft: 8,
   },
 
   footer: {
     textAlign: 'center',
-    fontSize: 12, color: '#9ca3af',
+    fontSize: 12, color: '#7a7a6e',
     marginTop: 32,
   },
 });

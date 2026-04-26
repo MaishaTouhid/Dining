@@ -19,7 +19,7 @@ export default function SplashScreen() {
   }, []);
 
   // Navigate after 2s
-  useEffect(() => {
+  /* useEffect(() => {
     const timer = setTimeout(async () => {
       try {
        // router.replace('/Onboarding');
@@ -34,7 +34,14 @@ export default function SplashScreen() {
       }
     }, 2000);
     return () => clearTimeout(timer);
-  }, []);
+  }, []); */
+  useEffect(() => {
+  const timer = setTimeout(() => {
+    router.replace('/Onboarding');
+  }, 2000);
+
+  return () => clearTimeout(timer);
+}, []);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -66,7 +73,7 @@ export default function SplashScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#eef0f7',
+    backgroundColor: '#edeae3',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingVertical: 80,
@@ -79,11 +86,11 @@ const styles = StyleSheet.create({
   logoBox: {
     width: 90, height: 90,
     borderRadius: 22,
-    backgroundColor: '#7b8fd4',
+    backgroundColor: '#2d5a3d',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 24,
-    shadowColor: '#7b8fd4',
+    shadowColor: '#2d5a3d',
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.3,
     shadowRadius: 16,
@@ -95,10 +102,10 @@ const styles = StyleSheet.create({
   },
   appName: {
     fontSize: 28, fontWeight: '700',
-    color: '#1a1a2e', marginBottom: 8,
+    color: '#1a1a1a', marginBottom: 8,
   },
   tagline: {
-    fontSize: 14, color: '#8a8fa8',
+    fontSize: 14, color: '#7a7a6e',
     marginBottom: 36,
   },
   dots: {
@@ -106,12 +113,12 @@ const styles = StyleSheet.create({
   },
   dot: {
     width: 8, height: 8, borderRadius: 4,
-    backgroundColor: '#c5c9e0',
+    backgroundColor: '#c8c4b4',
   },
   dotActive: {
-    backgroundColor: '#7b8fd4',
+    backgroundColor: '#2d5a3d',
   },
   footer: {
-    fontSize: 13, color: '#8a8fa8',
+    fontSize: 13, color: '#7a7a6e',
   },
 });

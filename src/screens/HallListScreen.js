@@ -21,7 +21,6 @@ export default function HallListScreen() {
   }, []);
 
   async function checkUpdatedHalls() {
-    // Check first 6 halls for performance
     const checks = await Promise.all(
       HALLS.map(async h => {
         const menu = await getMenu(h.id, today);
@@ -51,7 +50,7 @@ export default function HallListScreen() {
         <TextInput
           style={styles.searchInput}
           placeholder="Search hall name"
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor="#9a9a8e"
           value={search}
           onChangeText={setSearch}
         />
@@ -129,7 +128,6 @@ export default function HallListScreen() {
                   </Text>
                 </View>
 
-                {/* Updated today badge */}
                 {isUpdated && (
                   <View style={styles.updatedBadge}>
                     <Text style={styles.updatedText}>Updated today</Text>
@@ -145,17 +143,17 @@ export default function HallListScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F7FB' },
+  container: { flex: 1, backgroundColor: '#edeae3' },
   subHeader: {
     paddingHorizontal: 16, paddingTop: 16, paddingBottom: 12,
   },
-  subTitle: { fontSize: 22, fontWeight: '800', color: '#1a1a2e', marginBottom: 4 },
-  subDesc: { fontSize: 13, color: '#6b7280', lineHeight: 18 },
+  subTitle: { fontSize: 22, fontWeight: '800', color: '#1a1a1a', marginBottom: 4 },
+  subDesc: { fontSize: 13, color: '#6b6b60', lineHeight: 18 },
   searchBox: { marginHorizontal: 16, marginBottom: 10 },
   searchInput: {
-    backgroundColor: '#fff', borderRadius: 12,
-    padding: 12, fontSize: 14, color: '#1a1a2e',
-    borderWidth: 1, borderColor: '#e5e7eb',
+    backgroundColor: '#f5f2eb', borderRadius: 12,
+    padding: 12, fontSize: 14, color: '#1a1a1a',
+    borderWidth: 1, borderColor: '#d8d4c8',
   },
   filterRow: {
     flexDirection: 'row', paddingHorizontal: 16,
@@ -163,51 +161,51 @@ const styles = StyleSheet.create({
   },
   filterBtn: {
     paddingHorizontal: 16, paddingVertical: 7,
-    borderRadius: 20, backgroundColor: '#fff',
-    borderWidth: 1, borderColor: '#e5e7eb',
+    borderRadius: 20, backgroundColor: '#f5f2eb',
+    borderWidth: 1, borderColor: '#d8d4c8',
   },
-  filterActive: { backgroundColor: '#6e96eb', borderColor: '#6e96eb' },
-  filterText: { fontSize: 13, fontWeight: '600', color: '#6b7280' },
+  filterActive: { backgroundColor: '#2d5a3d', borderColor: '#2d5a3d' },
+  filterText: { fontSize: 13, fontWeight: '600', color: '#6b6b60' },
   filterTextActive: { color: '#fff' },
   quickLinks: {
     flexDirection: 'row', paddingHorizontal: 16,
     gap: 10, marginBottom: 16,
   },
   quickCard: {
-    flex: 1, backgroundColor: '#fff',
+    flex: 1, backgroundColor: '#f5f2eb',
     borderRadius: 14, padding: 14,
-    borderWidth: 1, borderColor: '#e5e7eb',
+    borderWidth: 1, borderColor: '#d8d4c8',
   },
   quickIcon: { fontSize: 20, marginBottom: 6 },
-  quickTitle: { fontSize: 14, fontWeight: '800', color: '#1a1a2e', marginBottom: 2 },
-  quickDesc: { fontSize: 11, color: '#9ca3af', lineHeight: 15 },
+  quickTitle: { fontSize: 14, fontWeight: '800', color: '#1a1a1a', marginBottom: 2 },
+  quickDesc: { fontSize: 11, color: '#7a7a6e', lineHeight: 15 },
   listTitle: {
-    fontSize: 14, fontWeight: '800', color: '#1a1a2e',
+    fontSize: 14, fontWeight: '800', color: '#1a1a1a',
     paddingHorizontal: 16, marginBottom: 10,
   },
   hallCard: {
-    backgroundColor: '#fff', borderRadius: 14,
+    backgroundColor: '#f5f2eb', borderRadius: 14,
     padding: 14, marginBottom: 10,
     flexDirection: 'row', alignItems: 'flex-start',
-    borderWidth: 1, borderColor: '#e5e7eb',
+    borderWidth: 1, borderColor: '#d8d4c8',
     shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.04, shadowRadius: 4, elevation: 1,
   },
   hallLeft: { flex: 1 },
-  hallName: { fontSize: 15, fontWeight: '800', color: '#1a1a2e', marginBottom: 4 },
-  hallDesc: { fontSize: 12, color: '#6b7280', marginBottom: 6, lineHeight: 16 },
-  hallMeals: { fontSize: 11, color: '#9ca3af' },
+  hallName: { fontSize: 15, fontWeight: '800', color: '#1a1a1a', marginBottom: 4 },
+  hallDesc: { fontSize: 12, color: '#6b6b60', marginBottom: 6, lineHeight: 16 },
+  hallMeals: { fontSize: 11, color: '#7a7a6e' },
   hallRight: { alignItems: 'flex-end', gap: 6 },
   typeBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 6 },
-  typeBadgeBoys: { backgroundColor: '#eff6ff' },
-  typeBadgeGirls: { backgroundColor: '#fdf2f8' },
+  typeBadgeBoys: { backgroundColor: '#e8ede9' },
+  typeBadgeGirls: { backgroundColor: '#f0ede6' },
   typeText: { fontSize: 10, fontWeight: '800' },
-  typeTextBoys: { color: '#3b82f6' },
-  typeTextGirls: { color: '#ec4899' },
+  typeTextBoys: { color: '#2d5a3d' },
+  typeTextGirls: { color: '#8b6a4f' },
   updatedBadge: {
-    backgroundColor: '#dcfce7',
+    backgroundColor: '#d4e6d8',
     borderRadius: 6,
     paddingHorizontal: 8, paddingVertical: 3,
   },
-  updatedText: { fontSize: 10, fontWeight: '700', color: '#16a34a' },
+  updatedText: { fontSize: 10, fontWeight: '700', color: '#2d5a3d' },
 });

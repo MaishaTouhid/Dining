@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
-  FlatList, Dimensions, 
+  FlatList, Dimensions,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
@@ -39,7 +39,7 @@ export default function OnboardingScreen() {
   const flatRef = useRef(null);
 
   async function finish() {
-    await AsyncStorage.setItem('onboarding_done', 'true');
+    // await AsyncStorage.setItem('onboarding_done', 'true');
     router.replace('/Home');
   }
 
@@ -62,7 +62,6 @@ export default function OnboardingScreen() {
 
   const renderSlide = ({ item }) => (
     <View style={styles.slide}>
-      {/* Icon area */}
       <View style={styles.iconArea}>
         {item.showLogo ? (
           <View style={styles.logoBox}>
@@ -135,7 +134,7 @@ export default function OnboardingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#eef0f7',
+    backgroundColor: '#edeae3',
     paddingBottom: 32,
   },
   skipBtn: {
@@ -143,85 +142,89 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   skipText: {
-    fontSize: 14, color: '#8a8fa8', fontWeight: '600',
+    fontSize: 14, color: '#7a7a6e', fontWeight: '600',
   },
 
   slide: {
     width,
     paddingHorizontal: 32,
     paddingTop: 20,
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   iconArea: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: 40,
-    marginTop: 20,
+    marginBottom: 44,
+    marginTop: 24,
   },
   logoBox: {
-    width: 72, height: 72,
-    borderRadius: 18,
-    backgroundColor: '#7b8fd4',
+    width: 88, height: 88,
+    borderRadius: 24,
+    backgroundColor: '#2d5a3d',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#7b8fd4',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.25,
-    shadowRadius: 12,
-    elevation: 6,
+    elevation: 4,
+    shadowColor: '#2d5a3d',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.22,
+    shadowRadius: 14,
   },
   logoText: {
-    fontSize: 26, fontWeight: '800', color: '#fff',
+    fontSize: 30, fontWeight: '800', color: '#fff',
   },
   slideIcon: {
-    fontSize: 56,
+    fontSize: 64,
   },
   slideTitle: {
-    fontSize: 28, fontWeight: '700',
-    color: '#1a1a2e', marginBottom: 16,
-    lineHeight: 36,
+    fontSize: 26, fontWeight: '700',
+    color: '#1a1a1a',
+    marginBottom: 14,
+    lineHeight: 34,
+    textAlign: 'center',
   },
   slideDesc: {
-    fontSize: 15, color: '#5a6080',
-    lineHeight: 24,
+    fontSize: 15, color: '#5a5a50',
+    lineHeight: 25,
+    textAlign: 'center',
   },
 
   dots: {
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 8,
-    marginVertical: 24,
+    marginVertical: 28,
   },
   dot: {
     width: 8, height: 8, borderRadius: 4,
-    backgroundColor: '#c5c9e0',
+    backgroundColor: '#c8c4b4',
   },
   dotActive: {
-    backgroundColor: '#7b8fd4',
-    width: 20,
+    backgroundColor: '#2d5a3d',
+    width: 24,
+    borderRadius: 4,
   },
 
   btnRow: {
     flexDirection: 'row',
     paddingHorizontal: 32,
     gap: 12,
-    marginBottom: 16,
+    marginBottom: 18,
   },
   backBtn: {
     flex: 1,
-    paddingVertical: 14,
-    borderRadius: 14,
-    backgroundColor: '#e0e4f0',
+    paddingVertical: 15,
+    borderRadius: 16,
+    backgroundColor: '#dedad0',
     alignItems: 'center',
   },
   backBtnText: {
-    fontSize: 15, fontWeight: '700', color: '#5a6080',
+    fontSize: 15, fontWeight: '700', color: '#5a5a50',
   },
   nextBtn: {
-    flex: 1,
-    paddingVertical: 14,
-    borderRadius: 14,
-    backgroundColor: '#6e96eb',
+    flex: 2,
+    paddingVertical: 15,
+    borderRadius: 16,
+    backgroundColor: '#2d5a3d',
     alignItems: 'center',
   },
   nextBtnText: {
@@ -230,6 +233,7 @@ const styles = StyleSheet.create({
 
   footer: {
     textAlign: 'center',
-    fontSize: 12, color: '#8a8fa8',
+    fontSize: 12, color: '#7a7a6e',
+    letterSpacing: 0.3,
   },
 });

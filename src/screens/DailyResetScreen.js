@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
-   ScrollView, ActivityIndicator, Alert,
+  ScrollView, ActivityIndicator, Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
@@ -27,9 +27,7 @@ export default function DailyResetScreen() {
           onPress: async () => {
             setDuplicating(true);
             try {
-              const success = await duplicateYesterday(
-                String(hallId), today, String(role)
-              );
+              const success = await duplicateYesterday(String(hallId), today, String(role));
               if (success) {
                 Alert.alert('✅ Done!', "Yesterday's menu copied to today.", [
                   { text: 'OK', onPress: () => router.back() }
@@ -68,9 +66,7 @@ export default function DailyResetScreen() {
                   }
                 });
               } else {
-                await upsertMenu(String(hallId), today, {
-                  canteen: { items: [] }
-                });
+                await upsertMenu(String(hallId), today, { canteen: { items: [] } });
               }
               Alert.alert('✅ Cleared!', 'Menu cleared for today.', [
                 { text: 'OK', onPress: () => router.back() }
@@ -92,17 +88,12 @@ export default function DailyResetScreen() {
         <Text style={styles.pageTitle}>Start New Day</Text>
         <Text style={styles.pageSub}>Hall: {hallId} • Date: {today}</Text>
 
-        {/* Duplicate */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Duplicate Yesterday Menu</Text>
           <Text style={styles.cardDesc}>
             Copy yesterdays menu as a starting point for today.
           </Text>
-          <TouchableOpacity
-            style={styles.duplicateBtn}
-            onPress={handleDuplicate}
-            disabled={duplicating}
-          >
+          <TouchableOpacity style={styles.duplicateBtn} onPress={handleDuplicate} disabled={duplicating}>
             {duplicating
               ? <ActivityIndicator color="#fff" />
               : <Text style={styles.duplicateBtnText}>Duplicate Yesterday</Text>
@@ -110,67 +101,39 @@ export default function DailyResetScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Clear */}
         <View style={styles.card}>
           <Text style={styles.cardTitle}>Clear All For Today</Text>
           <Text style={styles.cardDesc}>
             Remove all previous menu items and start with an empty menu.
           </Text>
-          <TouchableOpacity
-            style={styles.clearBtn}
-            onPress={handleClear}
-            disabled={clearing}
-          >
+          <TouchableOpacity style={styles.clearBtn} onPress={handleClear} disabled={clearing}>
             {clearing
-              ? <ActivityIndicator color="#ef4444" />
+              ? <ActivityIndicator color="#c0392b" />
               : <Text style={styles.clearBtnText}>Clear Everything</Text>
             }
           </TouchableOpacity>
         </View>
-
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F7FB' },
+  container: { flex: 1, backgroundColor: '#edeae3' },
   scroll: { padding: 20, paddingBottom: 40 },
-  pageTitle: {
-    fontSize: 24, fontWeight: '900',
-    color: '#1a1a2e', marginBottom: 4,
-  },
-  pageSub: { fontSize: 12, color: '#6b7280', marginBottom: 24 },
-
+  pageTitle: { fontSize: 24, fontWeight: '900', color: '#1a1a1a', marginBottom: 4 },
+  pageSub: { fontSize: 12, color: '#6b6b60', marginBottom: 24 },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 16, padding: 20,
-    marginBottom: 16,
-    borderWidth: 1, borderColor: '#e5e7eb',
+    backgroundColor: '#f5f2eb', borderRadius: 16, padding: 20,
+    marginBottom: 16, borderWidth: 1, borderColor: '#d8d4c8',
   },
-  cardTitle: {
-    fontSize: 17, fontWeight: '800',
-    color: '#1a1a2e', marginBottom: 6,
-  },
-  cardDesc: {
-    fontSize: 13, color: '#6b7280',
-    lineHeight: 18, marginBottom: 16,
-  },
-  duplicateBtn: {
-    backgroundColor: '#6e96eb',
-    borderRadius: 12, padding: 14,
-    alignItems: 'center',
-  },
-  duplicateBtnText: {
-    color: '#fff', fontWeight: '800', fontSize: 15,
-  },
+  cardTitle: { fontSize: 17, fontWeight: '800', color: '#1a1a1a', marginBottom: 6 },
+  cardDesc: { fontSize: 13, color: '#6b6b60', lineHeight: 18, marginBottom: 16 },
+  duplicateBtn: { backgroundColor: '#2d5a3d', borderRadius: 12, padding: 14, alignItems: 'center' },
+  duplicateBtnText: { color: '#fff', fontWeight: '800', fontSize: 15 },
   clearBtn: {
-    backgroundColor: '#fff',
-    borderRadius: 12, padding: 14,
-    alignItems: 'center',
-    borderWidth: 1.5, borderColor: '#fca5a5',
+    backgroundColor: '#f5f2eb', borderRadius: 12, padding: 14,
+    alignItems: 'center', borderWidth: 1.5, borderColor: '#e8b4b0',
   },
-  clearBtnText: {
-    color: '#ef4444', fontWeight: '800', fontSize: 15,
-  },
+  clearBtnText: { color: '#c0392b', fontWeight: '800', fontSize: 15 },
 });

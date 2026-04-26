@@ -1,70 +1,58 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  TextInput,
-  ActivityIndicator,
-  Alert,
-  ScrollView,
-} from "react-native";
+  View, Text, StyleSheet, TouchableOpacity,
+  TextInput, ActivityIndicator, Alert, ScrollView, KeyboardAvoidingView, Platform,
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter, useLocalSearchParams } from "expo-router";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../config/firebase";
-import { getModeratorData } from "../data/repository";
-import { HALLS } from "../data/halls";
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../config/firebase';
+import { getModeratorData } from '../data/repository';
 
 export default function ModeratorLoginScreen() {
   const router = useRouter();
   const { role } = useLocalSearchParams();
-
-  const [selectedHall, setSelectedHall] = useState(null);
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPass, setShowPass] = useState(false);
 
-  const roleLabel = role === "dining" ? "Dining" : "Canteen";
-
-  // Show first 6 halls as quick select
-  const quickHalls = HALLS.slice(0, 6);
+  const roleLabel = role === 'dining' ? 'Dining' : 'Canteen';
+  const roleColor = role === 'dining' ? '#2d6a4f' : '#7e57c2';
 
   async function handleLogin() {
-    if (!phone || !password) {
-      Alert.alert("Error", "Please enter phone/email and password.");
+    if (!email.trim() || !password) {
+      Alert.alert('Missing Info', 'Please enter your email/username and password.');
       return;
     }
     setLoading(true);
     try {
-      const email = phone.includes("@") ? phone : `${phone}@rudining.com`;
-      const cred = await signInWithEmailAndPassword(auth, email, password);
+      const fullEmail = email.includes('@') ? email : `${email}@rudining.com`;
+      const cred = await signInWithEmailAndPassword(auth, fullEmail, password);
       const modData = await getModeratorData(cred.user.uid);
 
       if (!modData) {
-        Alert.alert("Error", "Moderator account not found.");
+        Alert.alert('Error', 'Moderator account not found.');
         setLoading(false);
         return;
       }
-
       if (modData.role !== role) {
-        Alert.alert("Error", `This account is not a ${roleLabel} moderator.`);
+        Alert.alert('Wrong Role', `This account is not a ${roleLabel} moderator.`);
         setLoading(false);
         return;
       }
 
       router.replace({
-        pathname: "/ModeratorDashboard",
+        pathname: '/ModeratorDashboard',
         params: {
           hallId: modData.hallId,
           hallName: modData.hallName,
           role: modData.role,
-          moderatorName: modData.name || "",
+          moderatorName: modData.name || '',
         },
       });
     } catch (e) {
-      Alert.alert("Login Failed", "Invalid credentials. Try again.");
-      console.log(e);
+      Alert.alert('Login Failed', 'Invalid credentials. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -72,168 +60,104 @@ export default function ModeratorLoginScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <Text style={styles.title}>{roleLabel} Moderator Login</Text>
-        <Text style={styles.roleBadge}>
-          Role locked: {roleLabel.toUpperCase()}
-        </Text>
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={{ flex: 1 }}>
+        <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
+          {/* Header badge */}
+          <View style={[styles.roleBadge, { backgroundColor: roleColor }]}>
+            <Text style={styles.roleBadgeText}>{role === 'dining' ? '🍽️' : '🛒'} {roleLabel.toUpperCase()} MODERATOR</Text>
+          </View>
 
-        {/* Hall quick select */}
-        <Text style={styles.label}>Select Hall</Text>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.hallScroll}
-        >
-          {quickHalls.map((h) => {
-            const initials = h.name
-              .split(" ")
-              .filter((w) => w.length > 2)
-              .slice(0, 2)
-              .map((w) => w[0].toUpperCase())
-              .join("");
-            return (
-              <TouchableOpacity
-                key={h.id}
-                style={[
-                  styles.hallChip,
-                  selectedHall === h.id && styles.hallChipActive,
-                ]}
-                onPress={() => setSelectedHall(h.id)}
-              >
-                <Text
-                  style={[
-                    styles.hallChipText,
-                    selectedHall === h.id && styles.hallChipTextActive,
-                  ]}
-                >
-                  {initials || h.name.slice(0, 2).toUpperCase()}
-                </Text>
+          <Text style={styles.title}>{roleLabel} Login</Text>
+          <Text style={styles.subtitle}>Use your assigned credentials to access the dashboard.</Text>
+
+          <View style={styles.form}>
+            <Text style={styles.label}>Email or Username</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="dining.hall_id  or email"
+              placeholderTextColor="#bbb"
+              value={email}
+              onChangeText={setEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              returnKeyType="next"
+            />
+
+            <Text style={styles.label}>Password</Text>
+            <View style={styles.passRow}>
+              <TextInput
+                style={[styles.input, { flex: 1, marginBottom: 0 }]}
+                placeholder="••••••••"
+                placeholderTextColor="#bbb"
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry={!showPass}
+                returnKeyType="done"
+                onSubmitEditing={handleLogin}
+              />
+              <TouchableOpacity style={styles.eyeBtn} onPress={() => setShowPass(v => !v)}>
+                <Text style={styles.eyeText}>{showPass ? '🙈' : '👁️'}</Text>
               </TouchableOpacity>
-            );
-          })}
+            </View>
+
+            <View style={styles.hintBox}>
+              <Text style={styles.hintText}>
+                💡 Format: <Text style={{ fontWeight: '700' }}>{roleLabel.toLowerCase()}.hall_id@rudining.com</Text>
+              </Text>
+            </View>
+
+            <TouchableOpacity
+              style={[styles.loginBtn, { backgroundColor: roleColor }, loading && styles.loginBtnDisabled]}
+              onPress={handleLogin}
+              disabled={loading}
+              activeOpacity={0.88}
+            >
+              {loading
+                ? <ActivityIndicator color="#fff" />
+                : <Text style={styles.loginBtnText}>Login →</Text>
+              }
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => router.back()} style={styles.backLink}>
+              <Text style={styles.backLinkText}>← Back to role select</Text>
+            </TouchableOpacity>
+          </View>
         </ScrollView>
-
-        {/* Phone */}
-        <Text style={styles.label}>Phone</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="017xxxxxxxx"
-          placeholderTextColor="#9ca3af"
-          value={phone}
-          onChangeText={setPhone}
-          keyboardType="phone-pad"
-          autoCapitalize="none"
-        />
-
-        {/* Password */}
-        <Text style={styles.label}>Password</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="••••••••"
-          placeholderTextColor="#9ca3af"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-
-        {/* Login btn */}
-        <TouchableOpacity
-          style={styles.loginBtn}
-          onPress={handleLogin}
-          disabled={loading}
-        >
-          {loading ? (
-            <ActivityIndicator color="#fff" />
-          ) : (
-            <Text style={styles.loginBtnText}>Login</Text>
-          )}
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.backText}>← Back</Text>
-        </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#F5F7FB" },
+  container: { flex: 1, backgroundColor: '#f5f0e8' },
   scroll: { padding: 24, paddingBottom: 40 },
-
-  title: {
-    fontSize: 26,
-    fontWeight: "800",
-    color: "#1a1a2e",
-    marginBottom: 6,
-  },
   roleBadge: {
-    fontSize: 12,
-    color: "#6b7280",
-    marginBottom: 28,
+    alignSelf: 'flex-start', borderRadius: 20, paddingHorizontal: 14,
+    paddingVertical: 6, marginBottom: 20,
   },
-
-  label: {
-    fontSize: 13,
-    fontWeight: "700",
-    color: "#374151",
-    marginBottom: 8,
-  },
-
-  // Hall chips
-  hallScroll: { marginBottom: 20 },
-  hallChip: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: "#fff",
-    borderWidth: 1.5,
-    borderColor: "#e5e7eb",
-    alignItems: "center",
-    justifyContent: "center",
-    marginRight: 10,
-  },
-  hallChipActive: {
-    backgroundColor: "#eef2ff",
-    borderColor: "#6e96eb",
-  },
-  hallChipText: {
-    fontSize: 12,
-    fontWeight: "800",
-    color: "#6b7280",
-  },
-  hallChipTextActive: { color: "#6e96eb" },
-
+  roleBadgeText: { fontSize: 12, fontWeight: '700', color: '#fff', letterSpacing: 0.5 },
+  title: { fontSize: 28, fontWeight: '800', color: '#1a1a1a', marginBottom: 8 },
+  subtitle: { fontSize: 14, color: '#888', marginBottom: 32, lineHeight: 20 },
+  form: {},
+  label: { fontSize: 13, fontWeight: '700', color: '#555', marginBottom: 8 },
   input: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
-    padding: 14,
-    fontSize: 15,
-    color: "#1a1a2e",
-    borderWidth: 1,
-    borderColor: "#e5e7eb",
-    marginBottom: 16,
+    backgroundColor: '#fff', borderRadius: 12, padding: 14,
+    fontSize: 15, color: '#1a1a1a', marginBottom: 16,
+    borderWidth: 1.5, borderColor: '#e8e0d5',
   },
-
+  passRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 16 },
+  eyeBtn: { padding: 10 },
+  eyeText: { fontSize: 18 },
+  hintBox: {
+    backgroundColor: '#f0f9f4', borderRadius: 10, padding: 12,
+    marginBottom: 24, borderWidth: 1, borderColor: '#c8e6c9',
+  },
+  hintText: { fontSize: 12, color: '#555', lineHeight: 18 },
   loginBtn: {
-    backgroundColor: "#6e96eb",
-    borderRadius: 14,
-    padding: 16,
-    alignItems: "center",
-    marginBottom: 16,
-    marginTop: 8,
+    borderRadius: 14, padding: 16, alignItems: 'center', marginBottom: 16,
   },
-  loginBtnText: {
-    color: "#fff",
-    fontWeight: "800",
-    fontSize: 16,
-  },
-
-  backText: {
-    textAlign: "center",
-    fontSize: 14,
-    color: "#6b7280",
-    fontWeight: "600",
-  },
+  loginBtnDisabled: { opacity: 0.7 },
+  loginBtnText: { color: '#fff', fontWeight: '800', fontSize: 16 },
+  backLink: { alignItems: 'center', paddingVertical: 8 },
+  backLinkText: { fontSize: 14, color: '#888', fontWeight: '600' },
 });

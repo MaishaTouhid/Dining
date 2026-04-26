@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { getMenu } from '../data/repository';
 import { getTodayKey, formatTime } from '../data/date';
-import { STATUS_CONFIG, MEAL_LABELS } from '../data/types';
+import { STATUS_CONFIG } from '../data/types';
 
 const MENU_TYPES = [
   {
@@ -29,7 +29,7 @@ export default function HallDetailsScreen() {
 
   const [menu, setMenu] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [expanded, setExpanded] = useState(null); // 'dining' | 'canteen'
+  const [expanded, setExpanded] = useState(null);
   const [activeMeal, setActiveMeal] = useState('breakfast');
 
   useEffect(() => {
@@ -48,7 +48,6 @@ export default function HallDetailsScreen() {
     if (key === 'dining') setActiveMeal('breakfast');
   }
 
-  // ── Dining meal tab content ──
   function renderDiningContent() {
     const dining = menu?.dining;
     return (
@@ -68,7 +67,6 @@ export default function HallDetailsScreen() {
           ))}
         </View>
 
-        {/* Meal content */}
         {!dining?.[activeMeal] ? (
           <View style={styles.notUpdated}>
             <View style={styles.notUpdatedBadge}>
@@ -82,34 +80,48 @@ export default function HallDetailsScreen() {
           </View>
         ) : (
           <View>
-            {/* Time */}
             {dining[activeMeal]?.time ? (
               <Text style={styles.mealTime}>
                 Time: {dining[activeMeal].time}
               </Text>
             ) : null}
 
-            {/* Items */}
             {(dining[activeMeal]?.items || []).map((item, idx) => {
               const s = STATUS_CONFIG[item.status] || STATUS_CONFIG.available;
               return (
-                <View key={idx} style={styles.itemRow}>
+                <TouchableOpacity
+                  key={idx}
+                  style={styles.itemRow}
+                  activeOpacity={0.7}
+                  onPress={() => router.push({
+                    pathname: '/FoodDetail',
+                    params: {
+                      hallId: String(hallId),
+                      itemName: item.name,
+                      itemPrice: String(item.price || 0),
+                      itemQty: String(item.count ?? 0),
+                      itemStatus: item.status || 'available',
+                      mealType: activeMeal,
+                      itemEmoji: '🍽️',
+                    }
+                  })}
+                >
                   <View style={styles.itemLeft}>
                     <Text style={styles.itemName}>{item.name}</Text>
                     <Text style={styles.itemPrice}>
                       ৳{item.price || 0} • Remaining: {item.count ?? '—'}
                     </Text>
                   </View>
-                  <View style={[styles.statusBadge, { backgroundColor: s.bg }]}>
-                    <Text style={[styles.statusText, { color: s.color }]}>
-                      {s.label}
-                    </Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <View style={[styles.statusBadge, { backgroundColor: s.bg }]}>
+                      <Text style={[styles.statusText, { color: s.color }]}>{s.label}</Text>
+                    </View>
+                    <Text style={styles.chevron}>›</Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               );
             })}
 
-            {/* Note */}
             {dining[activeMeal]?.note ? (
               <View style={styles.noteBox}>
                 <Text style={styles.noteLabel}>NOTE</Text>
@@ -122,7 +134,6 @@ export default function HallDetailsScreen() {
     );
   }
 
-  // ── Canteen content ──
   function renderCanteenContent() {
     const items = menu?.canteen?.items || [];
     return (
@@ -144,19 +155,36 @@ export default function HallDetailsScreen() {
             {items.map((item, idx) => {
               const s = STATUS_CONFIG[item.status] || STATUS_CONFIG.available;
               return (
-                <View key={idx} style={styles.itemRow}>
+                <TouchableOpacity
+                  key={idx}
+                  style={styles.itemRow}
+                  activeOpacity={0.7}
+                  onPress={() => router.push({
+                    pathname: '/FoodDetail',
+                    params: {
+                      hallId: String(hallId),
+                      itemName: item.name,
+                      itemPrice: String(item.price || 0),
+                      itemQty: String(item.count ?? 0),
+                      itemStatus: item.status || 'available',
+                      mealType: 'canteen',
+                      itemEmoji: '🏪',
+                    }
+                  })}
+                >
                   <View style={styles.itemLeft}>
                     <Text style={styles.itemName}>{item.name}</Text>
                     <Text style={styles.itemPrice}>
                       ৳{item.price || 0} • Remaining: {item.count ?? '—'}
                     </Text>
                   </View>
-                  <View style={[styles.statusBadge, { backgroundColor: s.bg }]}>
-                    <Text style={[styles.statusText, { color: s.color }]}>
-                      {s.label}
-                    </Text>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                    <View style={[styles.statusBadge, { backgroundColor: s.bg }]}>
+                      <Text style={[styles.statusText, { color: s.color }]}>{s.label}</Text>
+                    </View>
+                    <Text style={styles.chevron}>›</Text>
                   </View>
-                </View>
+                </TouchableOpacity>
               );
             })}
           </>
@@ -168,10 +196,6 @@ export default function HallDetailsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        {/* Back button 
-        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Text style={styles.backText}>‹ Back</Text>
-        </TouchableOpacity> */}
 
         {/* Hall info card */}
         <View style={styles.infoCard}>
@@ -179,19 +203,19 @@ export default function HallDetailsScreen() {
           <Text style={styles.infoRow}>Hall ID: {hallId}</Text>
           <Text style={styles.infoRow}>Date: {today}</Text>
           <Text style={styles.infoRow}>
-            Last updated: {menu?.updatedAt ? formatTime(menu.updatedAt?.toDate?.() || menu.updatedAt) : 'Not updated today'}
+            Last updated: {menu?.updatedAt
+              ? formatTime(menu.updatedAt?.toDate?.() || menu.updatedAt)
+              : 'Not updated today'}
           </Text>
           <Text style={styles.infoRow}>
             Verified by: {menu?.diningUpdatedBy || 'Not verified yet'}
           </Text>
         </View>
 
-        {/* Select Menu Type */}
         {expanded === null && (
           <Text style={styles.selectLabel}>Select Menu Type</Text>
         )}
 
-        {/* Menu type cards */}
         {MENU_TYPES.map(type => (
           <View key={type.key}>
             <TouchableOpacity
@@ -210,7 +234,6 @@ export default function HallDetailsScreen() {
               </Text>
             </TouchableOpacity>
 
-            {/* Expanded content */}
             {expanded === type.key && (
               type.key === 'dining'
                 ? renderDiningContent()
@@ -227,7 +250,7 @@ export default function HallDetailsScreen() {
 
       {loading && (
         <View style={styles.loadingOverlay}>
-          <ActivityIndicator size="large" color="#6e96eb" />
+          <ActivityIndicator size="large" color="#2d5a3d" />
         </View>
       )}
     </SafeAreaView>
@@ -235,46 +258,42 @@ export default function HallDetailsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F7FB' },
+  container: { flex: 1, backgroundColor: '#edeae3' },
   scroll: { padding: 16, paddingBottom: 40 },
 
-
-  // Info card
   infoCard: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f2eb',
     borderRadius: 14,
     padding: 16,
     marginBottom: 16,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: '#d8d4c8',
   },
   hallName: {
     fontSize: 18, fontWeight: '800',
-    color: '#1a1a2e', marginBottom: 10,
+    color: '#1a1a1a', marginBottom: 10,
   },
   infoRow: {
-    fontSize: 12, color: '#6b7280',
-    marginBottom: 4,
+    fontSize: 12, color: '#6b6b60', marginBottom: 4,
   },
 
   selectLabel: {
     fontSize: 14, fontWeight: '700',
-    color: '#1a1a2e', marginBottom: 10,
+    color: '#1a1a1a', marginBottom: 10,
   },
 
-  // Menu type card
   menuTypeCard: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f2eb',
     borderRadius: 14,
     padding: 16,
     marginBottom: 10,
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: '#d8d4c8',
   },
   menuTypeCardActive: {
-    borderColor: '#6e96eb',
+    borderColor: '#2d5a3d',
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0,
     marginBottom: 0,
@@ -282,28 +301,26 @@ const styles = StyleSheet.create({
   menuTypeLeft: { flex: 1 },
   menuTypeTitle: {
     fontSize: 15, fontWeight: '800',
-    color: '#1a1a2e', marginBottom: 3,
+    color: '#1a1a1a', marginBottom: 3,
   },
   menuTypeDesc: {
-    fontSize: 12, color: '#6b7280',
+    fontSize: 12, color: '#6b6b60',
   },
   menuTypeChevron: {
-    fontSize: 16, color: '#9ca3af', fontWeight: '700',
+    fontSize: 16, color: '#7a7a6e', fontWeight: '700',
   },
 
-  // Expanded body
   expandBody: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f2eb',
     borderWidth: 1,
     borderTopWidth: 0,
-    borderColor: '#6e96eb',
+    borderColor: '#2d5a3d',
     borderBottomLeftRadius: 14,
     borderBottomRightRadius: 14,
     padding: 14,
     marginBottom: 10,
   },
 
-  // Meal tabs
   mealTabs: {
     flexDirection: 'row',
     gap: 8,
@@ -313,39 +330,37 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     paddingVertical: 7,
     borderRadius: 20,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: '#e8e4dc',
     borderWidth: 1,
-    borderColor: '#e5e7eb',
+    borderColor: '#d8d4c8',
   },
   mealTabActive: {
-    backgroundColor: '#6e96eb',
-    borderColor: '#6e96eb',
+    backgroundColor: '#2d5a3d',
+    borderColor: '#2d5a3d',
   },
   mealTabText: {
-    fontSize: 12, fontWeight: '700', color: '#6b7280',
+    fontSize: 12, fontWeight: '700', color: '#6b6b60',
   },
   mealTabTextActive: { color: '#fff' },
 
   mealTime: {
-    fontSize: 12, color: '#9ca3af',
-    marginBottom: 10,
+    fontSize: 12, color: '#7a7a6e', marginBottom: 10,
   },
 
-  // Item row
   itemRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 10,
+    paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6',
+    borderBottomColor: '#e8e4dc',
   },
   itemLeft: { flex: 1 },
   itemName: {
     fontSize: 14, fontWeight: '700',
-    color: '#1a1a2e', marginBottom: 2,
+    color: '#1a1a1a', marginBottom: 2,
   },
   itemPrice: {
-    fontSize: 11, color: '#9ca3af',
+    fontSize: 11, color: '#7a7a6e',
   },
   statusBadge: {
     paddingHorizontal: 8,
@@ -355,57 +370,51 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 10, fontWeight: '800',
   },
+  chevron: {
+    fontSize: 18, color: '#2d5a3d', fontWeight: '700',
+  },
 
-  // Note
   noteBox: {
     marginTop: 10,
-    backgroundColor: '#f9fafb',
+    backgroundColor: '#edeae3',
     borderRadius: 8,
     padding: 10,
   },
   noteLabel: {
     fontSize: 10, fontWeight: '800',
-    color: '#9ca3af', marginBottom: 3,
+    color: '#7a7a6e', marginBottom: 3,
     letterSpacing: 0.5,
   },
   noteText: {
-    fontSize: 12, color: '#6b7280',
+    fontSize: 12, color: '#6b6b60',
   },
 
-  // Not updated
-  notUpdated: {
-    paddingVertical: 10,
-  },
+  notUpdated: { paddingVertical: 10 },
   notUpdatedBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: '#f3f4f6',
+    backgroundColor: '#e8e4dc',
     borderRadius: 6,
     paddingHorizontal: 8,
     paddingVertical: 4,
     marginBottom: 8,
   },
   notUpdatedText: {
-    fontSize: 10, fontWeight: '800', color: '#9ca3af',
+    fontSize: 10, fontWeight: '800', color: '#7a7a6e',
   },
   notUpdatedDesc: {
-    fontSize: 12, color: '#6b7280',
-    marginBottom: 10,
+    fontSize: 12, color: '#6b6b60', marginBottom: 10,
   },
 
   tapHint: {
     textAlign: 'center',
-    fontSize: 12, color: '#9ca3af',
+    fontSize: 12, color: '#7a7a6e',
     marginTop: 16,
   },
 
-  // Loading overlay
   loadingOverlay: {
     ...StyleSheet.absoluteFillObject,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'rgba(255,255,255,0.6)',
+    backgroundColor: 'rgba(237,234,227,0.7)',
   },
 });
-
- {/* backBtn: { paddingVertical: 8, paddingHorizontal: 4, marginBottom: 8 },
-  backText: { fontSize: 16, color: '#6e96eb', fontWeight: '700' }, */}

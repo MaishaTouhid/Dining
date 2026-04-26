@@ -1,9 +1,7 @@
 import React from 'react';
 import {
-  View, Text, StyleSheet, TouchableOpacity,
- 
+  View, Text, StyleSheet, TouchableOpacity, SafeAreaView,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 
 export default function ModeratorRoleScreen() {
@@ -12,34 +10,40 @@ export default function ModeratorRoleScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.title}>Moderator</Text>
-        <Text style={styles.sub}>Select your responsibility</Text>
+        <View style={styles.iconBox}>
+          <Text style={styles.iconText}>🛡️</Text>
+        </View>
+        <Text style={styles.title}>Moderator Login</Text>
+        <Text style={styles.sub}>Select your role to continue</Text>
 
         <TouchableOpacity
-          style={styles.btnPrimary}
-          onPress={() => router.push({
-            pathname: '/ModeratorLogin',
-            params: { role: 'dining' }
-          })}
+          style={[styles.roleCard, styles.diningCard]}
+          onPress={() => router.push({ pathname: '/ModeratorLogin', params: { role: 'dining' } })}
+          activeOpacity={0.88}
         >
-          <Text style={styles.btnPrimaryText}>Dining Moderator</Text>
+          <Text style={styles.roleCardIcon}>🍽️</Text>
+          <View style={styles.roleCardInfo}>
+            <Text style={styles.roleCardTitle}>Dining Moderator</Text>
+            <Text style={styles.roleCardDesc}>Manage breakfast, lunch & dinner menu</Text>
+          </View>
+          <Text style={styles.roleCardArrow}>›</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
-          style={styles.btnSecondary}
-          onPress={() => router.push({
-            pathname: '/ModeratorLogin',
-            params: { role: 'canteen' }
-          })}
+          style={[styles.roleCard, styles.canteenCard]}
+          onPress={() => router.push({ pathname: '/ModeratorLogin', params: { role: 'canteen' } })}
+          activeOpacity={0.88}
         >
-          <Text style={styles.btnSecondaryText}>Canteen Moderator</Text>
+          <Text style={styles.roleCardIcon}>🛒</Text>
+          <View style={styles.roleCardInfo}>
+            <Text style={styles.roleCardTitle}>Canteen Moderator</Text>
+            <Text style={styles.roleCardDesc}>Manage canteen items & availability</Text>
+          </View>
+          <Text style={styles.roleCardArrow}>›</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.backBtn}
-          onPress={() => router.back()}
-        >
-          <Text style={styles.backText}>← Back</Text>
+        <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
+          <Text style={styles.backText}>← Back to Home</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -47,47 +51,29 @@ export default function ModeratorRoleScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F7FB' },
-  content: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 32,
+  container: { flex: 1, backgroundColor: '#f5f0e8' },
+  content: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 },
+  iconBox: {
+    width: 72, height: 72, borderRadius: 20, backgroundColor: '#d8ead2',
+    alignItems: 'center', justifyContent: 'center', marginBottom: 20,
   },
-  title: {
-    fontSize: 28, fontWeight: '800',
-    color: '#1a1a2e', marginBottom: 8,
-  },
-  sub: {
-    fontSize: 14, color: '#6b7280',
-    marginBottom: 40,
-  },
-  btnPrimary: {
-    width: '100%',
-    backgroundColor: '#6e96eb',
-    paddingVertical: 16,
-    borderRadius: 14,
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  btnPrimaryText: {
-    color: '#fff', fontWeight: '800', fontSize: 16,
-  },
-  btnSecondary: {
-    width: '100%',
-    backgroundColor: '#fff',
-    paddingVertical: 16,
-    borderRadius: 14,
-    alignItems: 'center',
-    marginBottom: 32,
+  iconText: { fontSize: 34 },
+  title: { fontSize: 28, fontWeight: '800', color: '#1a1a1a', marginBottom: 8 },
+  sub: { fontSize: 14, color: '#888', marginBottom: 36 },
+  roleCard: {
+    width: '100%', borderRadius: 16, padding: 18, marginBottom: 12,
+    flexDirection: 'row', alignItems: 'center', gap: 14,
     borderWidth: 1.5,
-    borderColor: '#e5e7eb',
+    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06, shadowRadius: 6, elevation: 3,
   },
-  btnSecondaryText: {
-    color: '#1a1a2e', fontWeight: '700', fontSize: 16,
-  },
-  backBtn: { marginTop: 8 },
-  backText: {
-    fontSize: 14, color: '#6b7280', fontWeight: '600',
-  },
+  diningCard: { backgroundColor: '#fff', borderColor: '#2d6a4f' },
+  canteenCard: { backgroundColor: '#fff', borderColor: '#7e57c2' },
+  roleCardIcon: { fontSize: 26 },
+  roleCardInfo: { flex: 1 },
+  roleCardTitle: { fontSize: 16, fontWeight: '800', color: '#1a1a1a', marginBottom: 3 },
+  roleCardDesc: { fontSize: 12, color: '#888' },
+  roleCardArrow: { fontSize: 24, color: '#ccc', fontWeight: '700' },
+  backBtn: { marginTop: 24, paddingVertical: 8 },
+  backText: { fontSize: 14, color: '#888', fontWeight: '600' },
 });

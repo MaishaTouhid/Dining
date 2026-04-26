@@ -1,7 +1,8 @@
+// ─── QuickStatusScreen.js ───────────────────────────────────────────────────
 import React, { useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
-  ScrollView,  TextInput,
+  ScrollView, TextInput,
   ActivityIndicator, Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -83,7 +84,7 @@ export default function QuickStatusScreen() {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator color="#6e96eb" style={{ flex: 1 }} />
+        <ActivityIndicator color="#2d5a3d" style={{ flex: 1 }} />
       </SafeAreaView>
     );
   }
@@ -100,14 +101,9 @@ export default function QuickStatusScreen() {
               {meal.charAt(0).toUpperCase() + meal.slice(1)}
             </Text>
 
-            {/* Bulk buttons */}
             <View style={styles.bulkRow}>
               {['available', 'limited', 'finished'].map(s => (
-                <TouchableOpacity
-                  key={s}
-                  style={styles.bulkBtn}
-                  onPress={() => applyAll(meal, s)}
-                >
+                <TouchableOpacity key={s} style={styles.bulkBtn} onPress={() => applyAll(meal, s)}>
                   <Text style={styles.bulkText}>
                     All {s === 'limited' ? 'Low' : s.charAt(0).toUpperCase() + s.slice(1)}
                   </Text>
@@ -115,18 +111,13 @@ export default function QuickStatusScreen() {
               ))}
             </View>
 
-            {/* Items */}
             {meals[meal].items.length === 0 ? (
-              <Text style={styles.emptyHint}>
-                No items yet. Add items first from Menu Editor.
-              </Text>
+              <Text style={styles.emptyHint}>No items yet. Add items first from Menu Editor.</Text>
             ) : (
               meals[meal].items.map((item, idx) => (
                 <View key={idx} style={styles.itemCard}>
                   <Text style={styles.itemName}>{item.name}</Text>
                   <Text style={styles.itemPrice}>৳{item.price || 0}</Text>
-
-                  {/* Count */}
                   <View style={styles.countRow}>
                     <Text style={styles.countLabel}>Count</Text>
                     <TextInput
@@ -135,25 +126,17 @@ export default function QuickStatusScreen() {
                       onChangeText={v => updateItemCount(meal, idx, v)}
                       keyboardType="numeric"
                       placeholder="—"
-                      placeholderTextColor="#9ca3af"
+                      placeholderTextColor="#9a9a8e"
                     />
                   </View>
-
-                  {/* Status buttons */}
                   <View style={styles.statusRow}>
                     {MEAL_STATUSES.map(s => (
                       <TouchableOpacity
                         key={s}
-                        style={[
-                          styles.statusBtn,
-                          item.status === s && styles.statusBtnActive,
-                        ]}
+                        style={[styles.statusBtn, item.status === s && styles.statusBtnActive]}
                         onPress={() => updateItemStatus(meal, idx, s)}
                       >
-                        <Text style={[
-                          styles.statusBtnText,
-                          item.status === s && styles.statusBtnTextActive,
-                        ]}>
+                        <Text style={[styles.statusBtnText, item.status === s && styles.statusBtnTextActive]}>
                           {s === 'limited' ? 'Low' : s.charAt(0).toUpperCase() + s.slice(1)}
                         </Text>
                       </TouchableOpacity>
@@ -165,98 +148,52 @@ export default function QuickStatusScreen() {
           </View>
         ))}
 
-        <TouchableOpacity
-          style={styles.saveBtn}
-          onPress={handleSave}
-          disabled={saving}
-        >
-          {saving
-            ? <ActivityIndicator color="#fff" />
-            : <Text style={styles.saveBtnText}>Save Updates</Text>
-          }
+        <TouchableOpacity style={styles.saveBtn} onPress={handleSave} disabled={saving}>
+          {saving ? <ActivityIndicator color="#fff" /> : <Text style={styles.saveBtnText}>Save Updates</Text>}
         </TouchableOpacity>
-
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F7FB' },
+  container: { flex: 1, backgroundColor: '#edeae3' },
   scroll: { padding: 16, paddingBottom: 40 },
-
-  pageTitle: {
-    fontSize: 20, fontWeight: '900',
-    color: '#1a1a2e', marginBottom: 4,
-  },
-  pageSub: { fontSize: 12, color: '#6b7280', marginBottom: 16 },
-
+  pageTitle: { fontSize: 20, fontWeight: '900', color: '#1a1a1a', marginBottom: 4 },
+  pageSub: { fontSize: 12, color: '#6b6b60', marginBottom: 16 },
   mealBlock: {
-    backgroundColor: '#fff',
-    borderRadius: 14, padding: 14,
-    marginBottom: 12,
-    borderWidth: 1, borderColor: '#e5e7eb',
+    backgroundColor: '#f5f2eb', borderRadius: 14, padding: 14,
+    marginBottom: 12, borderWidth: 1, borderColor: '#d8d4c8',
   },
-  mealTitle: {
-    fontSize: 16, fontWeight: '800',
-    color: '#1a1a2e', marginBottom: 10,
-  },
-  bulkRow: {
-    flexDirection: 'row', gap: 8, marginBottom: 12,
-  },
+  mealTitle: { fontSize: 16, fontWeight: '800', color: '#1a1a1a', marginBottom: 10 },
+  bulkRow: { flexDirection: 'row', gap: 8, marginBottom: 12 },
   bulkBtn: {
-    flex: 1, paddingVertical: 8,
-    borderRadius: 10, backgroundColor: '#f3f4f6',
-    borderWidth: 1, borderColor: '#e5e7eb',
-    alignItems: 'center',
+    flex: 1, paddingVertical: 8, borderRadius: 10,
+    backgroundColor: '#e8e4dc', borderWidth: 1, borderColor: '#d8d4c8', alignItems: 'center',
   },
-  bulkText: { fontSize: 11, fontWeight: '700', color: '#374151' },
-
-  emptyHint: {
-    fontSize: 12, color: '#9ca3af',
-    textAlign: 'center', paddingVertical: 12,
-  },
-
+  bulkText: { fontSize: 11, fontWeight: '700', color: '#3a3a30' },
+  emptyHint: { fontSize: 12, color: '#7a7a6e', textAlign: 'center', paddingVertical: 12 },
   itemCard: {
-    backgroundColor: '#f9fafb',
-    borderRadius: 12, padding: 12,
-    marginBottom: 8,
-    borderWidth: 1, borderColor: '#e5e7eb',
+    backgroundColor: '#edeae3', borderRadius: 12, padding: 12,
+    marginBottom: 8, borderWidth: 1, borderColor: '#d8d4c8',
   },
-  itemName: {
-    fontSize: 14, fontWeight: '800', color: '#1a1a2e',
-  },
-  itemPrice: { fontSize: 12, color: '#9ca3af', marginBottom: 8 },
-
-  countRow: {
-    flexDirection: 'row', alignItems: 'center',
-    gap: 10, marginBottom: 8,
-  },
-  countLabel: { fontSize: 12, fontWeight: '700', color: '#6b7280' },
+  itemName: { fontSize: 14, fontWeight: '800', color: '#1a1a1a' },
+  itemPrice: { fontSize: 12, color: '#7a7a6e', marginBottom: 8 },
+  countRow: { flexDirection: 'row', alignItems: 'center', gap: 10, marginBottom: 8 },
+  countLabel: { fontSize: 12, fontWeight: '700', color: '#6b6b60' },
   countInput: {
-    flex: 1, backgroundColor: '#fff',
-    borderRadius: 8, padding: 8,
-    fontSize: 13, color: '#1a1a2e',
-    borderWidth: 1, borderColor: '#e5e7eb',
+    flex: 1, backgroundColor: '#f5f2eb', borderRadius: 8,
+    padding: 8, fontSize: 13, color: '#1a1a1a',
+    borderWidth: 1, borderColor: '#d8d4c8',
   },
-
   statusRow: { flexDirection: 'row', gap: 8 },
   statusBtn: {
-    flex: 1, paddingVertical: 8,
-    borderRadius: 8, backgroundColor: '#fff',
-    borderWidth: 1, borderColor: '#e5e7eb',
-    alignItems: 'center',
+    flex: 1, paddingVertical: 8, borderRadius: 8,
+    backgroundColor: '#f5f2eb', borderWidth: 1, borderColor: '#d8d4c8', alignItems: 'center',
   },
-  statusBtnActive: {
-    borderColor: '#1a1a2e', backgroundColor: '#f0f0f0',
-  },
-  statusBtnText: { fontSize: 11, fontWeight: '700', color: '#9ca3af' },
-  statusBtnTextActive: { color: '#1a1a2e' },
-
-  saveBtn: {
-    backgroundColor: '#6e96eb',
-    borderRadius: 14, padding: 16,
-    alignItems: 'center', marginTop: 8,
-  },
+  statusBtnActive: { borderColor: '#2d5a3d', backgroundColor: '#e8ede9' },
+  statusBtnText: { fontSize: 11, fontWeight: '700', color: '#7a7a6e' },
+  statusBtnTextActive: { color: '#2d5a3d' },
+  saveBtn: { backgroundColor: '#2d5a3d', borderRadius: 14, padding: 16, alignItems: 'center', marginTop: 8 },
   saveBtnText: { color: '#fff', fontWeight: '800', fontSize: 16 },
 });

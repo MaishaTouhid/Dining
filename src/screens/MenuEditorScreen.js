@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity,
-  ScrollView,  TextInput,
+  ScrollView, TextInput,
   ActivityIndicator, Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -122,7 +122,7 @@ export default function MenuEditorScreen() {
   if (loading) {
     return (
       <SafeAreaView style={styles.container}>
-        <ActivityIndicator color="#6e96eb" style={{ flex: 1 }} />
+        <ActivityIndicator color="#2d5a3d" style={{ flex: 1 }} />
       </SafeAreaView>
     );
   }
@@ -230,7 +230,7 @@ export default function MenuEditorScreen() {
         <TextInput
           style={styles.timeInput}
           placeholder="Meal time (e.g. 7:00 AM - 9:00 AM)"
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor="#9a9a8e"
           value={currentMeal.time}
           onChangeText={v => updateMealField('time', v)}
         />
@@ -255,7 +255,7 @@ export default function MenuEditorScreen() {
                   <TextInput
                     style={styles.itemNameInput}
                     placeholder="Item name"
-                    placeholderTextColor="#9ca3af"
+                    placeholderTextColor="#9a9a8e"
                     value={item.name}
                     onChangeText={v => updateItem(idx, 'name', v)}
                   />
@@ -267,12 +267,11 @@ export default function MenuEditorScreen() {
                   </TouchableOpacity>
                 </View>
 
-                {/* Price + Count */}
                 <View style={styles.itemNums}>
                   <TextInput
                     style={styles.numInput}
                     placeholder="Price"
-                    placeholderTextColor="#9ca3af"
+                    placeholderTextColor="#9a9a8e"
                     value={String(item.price)}
                     onChangeText={v => updateItem(idx, 'price', v)}
                     keyboardType="numeric"
@@ -280,14 +279,13 @@ export default function MenuEditorScreen() {
                   <TextInput
                     style={styles.numInput}
                     placeholder="Count"
-                    placeholderTextColor="#9ca3af"
+                    placeholderTextColor="#9a9a8e"
                     value={String(item.count)}
                     onChangeText={v => updateItem(idx, 'count', v)}
                     keyboardType="numeric"
                   />
                 </View>
 
-                {/* Status */}
                 <View style={styles.statusRow}>
                   {MEAL_STATUSES.map(s => (
                     <TouchableOpacity
@@ -316,13 +314,12 @@ export default function MenuEditorScreen() {
         <TextInput
           style={styles.noteInput}
           placeholder="Note (optional)"
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor="#9a9a8e"
           value={currentMeal.note}
           onChangeText={v => updateMealField('note', v)}
           multiline
         />
 
-        {/* Preview + Save */}
         <TouchableOpacity
           style={styles.previewBtn}
           onPress={() => setShowPreview(true)}
@@ -347,46 +344,35 @@ export default function MenuEditorScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#F5F7FB' },
+  container: { flex: 1, backgroundColor: '#edeae3' },
   scroll: { padding: 16, paddingBottom: 40 },
 
-  pageTitle: {
-    fontSize: 20, fontWeight: '900',
-    color: '#1a1a2e', marginBottom: 4,
-  },
-  pageSub: {
-    fontSize: 12, color: '#6b7280', marginBottom: 16,
-  },
+  pageTitle: { fontSize: 20, fontWeight: '900', color: '#1a1a1a', marginBottom: 4 },
+  pageSub: { fontSize: 12, color: '#6b6b60', marginBottom: 16 },
 
-  mealTabs: {
-    flexDirection: 'row', gap: 8, marginBottom: 12,
-  },
+  mealTabs: { flexDirection: 'row', gap: 8, marginBottom: 12 },
   mealTab: {
     flex: 1, paddingVertical: 10,
-    borderRadius: 12, backgroundColor: '#fff',
-    borderWidth: 1, borderColor: '#e5e7eb',
+    borderRadius: 12, backgroundColor: '#f5f2eb',
+    borderWidth: 1, borderColor: '#d8d4c8',
     alignItems: 'center',
   },
-  mealTabActive: {
-    backgroundColor: '#6e96eb', borderColor: '#6e96eb',
-  },
-  mealTabText: {
-    fontSize: 11, fontWeight: '700', color: '#6b7280',
-  },
+  mealTabActive: { backgroundColor: '#2d5a3d', borderColor: '#2d5a3d' },
+  mealTabText: { fontSize: 11, fontWeight: '700', color: '#6b6b60' },
   mealTabTextActive: { color: '#fff' },
 
   timeInput: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f2eb',
     borderRadius: 12, padding: 12,
-    fontSize: 13, color: '#1a1a2e',
-    borderWidth: 1, borderColor: '#e5e7eb',
+    fontSize: 13, color: '#1a1a1a',
+    borderWidth: 1, borderColor: '#d8d4c8',
     marginBottom: 12,
   },
 
   itemsBlock: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f2eb',
     borderRadius: 14, padding: 14,
-    borderWidth: 1, borderColor: '#e5e7eb',
+    borderWidth: 1, borderColor: '#d8d4c8',
     marginBottom: 12,
   },
   itemsHeader: {
@@ -395,169 +381,110 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
-  blockTitle: {
-    fontSize: 16, fontWeight: '800', color: '#1a1a2e',
-  },
+  blockTitle: { fontSize: 16, fontWeight: '800', color: '#1a1a1a' },
   addItemBtn: {
-    backgroundColor: '#eef2ff',
-    borderRadius: 8,
-    paddingHorizontal: 12, paddingVertical: 6,
+    backgroundColor: '#e8ede9',
+    borderRadius: 8, paddingHorizontal: 12, paddingVertical: 6,
   },
-  addItemText: {
-    fontSize: 12, fontWeight: '700', color: '#6e96eb',
-  },
-  emptyHint: {
-    fontSize: 13, color: '#9ca3af',
-    textAlign: 'center', paddingVertical: 20,
-  },
+  addItemText: { fontSize: 12, fontWeight: '700', color: '#2d5a3d' },
+  emptyHint: { fontSize: 13, color: '#7a7a6e', textAlign: 'center', paddingVertical: 20 },
 
   itemCard: {
-    backgroundColor: '#f9fafb',
+    backgroundColor: '#edeae3',
     borderRadius: 12, padding: 12,
     marginBottom: 10,
-    borderWidth: 1, borderColor: '#e5e7eb',
+    borderWidth: 1, borderColor: '#d8d4c8',
   },
-  itemCardTop: {
-    flexDirection: 'row',
-    alignItems: 'center', gap: 8,
-    marginBottom: 8,
-  },
+  itemCardTop: { flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 },
   itemNameInput: {
-    flex: 1, backgroundColor: '#fff',
+    flex: 1, backgroundColor: '#f5f2eb',
     borderRadius: 8, padding: 10,
-    fontSize: 14, color: '#1a1a2e',
-    borderWidth: 1, borderColor: '#e5e7eb',
+    fontSize: 14, color: '#1a1a1a',
+    borderWidth: 1, borderColor: '#d8d4c8',
   },
   removeBtn: {
-    backgroundColor: '#fee2e2',
-    borderRadius: 8,
-    paddingHorizontal: 10, paddingVertical: 8,
+    backgroundColor: '#f5e0de',
+    borderRadius: 8, paddingHorizontal: 10, paddingVertical: 8,
   },
-  removeBtnText: {
-    fontSize: 11, fontWeight: '700', color: '#ef4444',
-  },
+  removeBtnText: { fontSize: 11, fontWeight: '700', color: '#c0392b' },
 
-  itemNums: {
-    flexDirection: 'row', gap: 8, marginBottom: 8,
-  },
+  itemNums: { flexDirection: 'row', gap: 8, marginBottom: 8 },
   numInput: {
-    flex: 1, backgroundColor: '#fff',
+    flex: 1, backgroundColor: '#f5f2eb',
     borderRadius: 8, padding: 10,
-    fontSize: 13, color: '#1a1a2e',
-    borderWidth: 1, borderColor: '#e5e7eb',
+    fontSize: 13, color: '#1a1a1a',
+    borderWidth: 1, borderColor: '#d8d4c8',
   },
 
-  statusRow: {
-    flexDirection: 'row', gap: 8,
-  },
+  statusRow: { flexDirection: 'row', gap: 8 },
   statusBtn: {
     flex: 1, paddingVertical: 8,
-    borderRadius: 8, backgroundColor: '#fff',
-    borderWidth: 1, borderColor: '#e5e7eb',
+    borderRadius: 8, backgroundColor: '#f5f2eb',
+    borderWidth: 1, borderColor: '#d8d4c8',
     alignItems: 'center',
   },
-  statusBtnActive: {
-    borderColor: '#1a1a2e', backgroundColor: '#f9fafb',
-  },
-  statusBtnText: {
-    fontSize: 11, fontWeight: '700', color: '#9ca3af',
-  },
-  statusBtnTextActive: { color: '#1a1a2e' },
+  statusBtnActive: { borderColor: '#2d5a3d', backgroundColor: '#e8ede9' },
+  statusBtnText: { fontSize: 11, fontWeight: '700', color: '#7a7a6e' },
+  statusBtnTextActive: { color: '#2d5a3d' },
 
   noteInput: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f2eb',
     borderRadius: 12, padding: 12,
-    fontSize: 13, color: '#1a1a2e',
-    borderWidth: 1, borderColor: '#e5e7eb',
+    fontSize: 13, color: '#1a1a1a',
+    borderWidth: 1, borderColor: '#d8d4c8',
     marginBottom: 12, minHeight: 60,
   },
 
   previewBtn: {
-    backgroundColor: '#fff',
+    backgroundColor: '#f5f2eb',
     borderRadius: 14, padding: 14,
     alignItems: 'center', marginBottom: 10,
-    borderWidth: 1, borderColor: '#e5e7eb',
+    borderWidth: 1, borderColor: '#d8d4c8',
   },
-  previewBtnText: {
-    fontSize: 15, fontWeight: '700', color: '#374151',
-  },
+  previewBtnText: { fontSize: 15, fontWeight: '700', color: '#3a3a30' },
   saveBtn: {
-    backgroundColor: '#6e96eb',
-    borderRadius: 14, padding: 16,
-    alignItems: 'center',
+    backgroundColor: '#2d5a3d',
+    borderRadius: 14, padding: 16, alignItems: 'center',
   },
-  saveBtnText: {
-    color: '#fff', fontWeight: '800', fontSize: 16,
-  },
+  saveBtnText: { color: '#fff', fontWeight: '800', fontSize: 16 },
 
-  // Preview styles
   previewCard: {
-    backgroundColor: '#fff',
-    borderRadius: 14, padding: 16,
-    marginBottom: 16,
-    borderWidth: 1, borderColor: '#e5e7eb',
+    backgroundColor: '#f5f2eb',
+    borderRadius: 14, padding: 16, marginBottom: 16,
+    borderWidth: 1, borderColor: '#d8d4c8',
   },
-  previewHall: {
-    fontSize: 18, fontWeight: '800', color: '#1a1a2e', marginBottom: 4,
-  },
-  previewDate: { fontSize: 12, color: '#6b7280', marginBottom: 2 },
-  previewNote: { fontSize: 11, color: '#9ca3af' },
-
+  previewHall: { fontSize: 18, fontWeight: '800', color: '#1a1a1a', marginBottom: 4 },
+  previewDate: { fontSize: 12, color: '#6b6b60', marginBottom: 2 },
+  previewNote: { fontSize: 11, color: '#7a7a6e' },
   previewSection: {
-    backgroundColor: '#fff',
-    borderRadius: 14, padding: 14,
-    marginBottom: 12,
-    borderWidth: 1, borderColor: '#e5e7eb',
+    backgroundColor: '#f5f2eb',
+    borderRadius: 14, padding: 14, marginBottom: 12,
+    borderWidth: 1, borderColor: '#d8d4c8',
   },
-  previewMealTitle: {
-    fontSize: 15, fontWeight: '800',
-    color: '#1a1a2e', marginBottom: 8,
-  },
-  previewTime: {
-    fontSize: 11, color: '#9ca3af', marginBottom: 8,
-  },
+  previewMealTitle: { fontSize: 15, fontWeight: '800', color: '#1a1a1a', marginBottom: 8 },
+  previewTime: { fontSize: 11, color: '#7a7a6e', marginBottom: 8 },
   previewItem: {
     flexDirection: 'row', alignItems: 'center',
-    paddingVertical: 8,
-    borderBottomWidth: 1, borderBottomColor: '#f3f4f6',
+    paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: '#e8e4dc',
   },
   previewItemLeft: { flex: 1 },
-  previewItemName: {
-    fontSize: 14, fontWeight: '700', color: '#1a1a2e',
-  },
-  previewItemSub: { fontSize: 11, color: '#9ca3af', marginTop: 2 },
-  statusBadge: {
-    paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6,
-  },
+  previewItemName: { fontSize: 14, fontWeight: '700', color: '#1a1a1a' },
+  previewItemSub: { fontSize: 11, color: '#7a7a6e', marginTop: 2 },
+  statusBadge: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6 },
   statusText: { fontSize: 10, fontWeight: '800' },
-  noteBox: {
-    marginTop: 8, backgroundColor: '#f9fafb',
-    borderRadius: 8, padding: 8,
-  },
-  noteLabel: {
-    fontSize: 10, fontWeight: '800',
-    color: '#9ca3af', marginBottom: 2,
-  },
-  noteText: { fontSize: 12, color: '#6b7280' },
-
-  previewBtns: {
-    flexDirection: 'row', gap: 10, marginTop: 8,
-  },
+  noteBox: { marginTop: 8, backgroundColor: '#edeae3', borderRadius: 8, padding: 8 },
+  noteLabel: { fontSize: 10, fontWeight: '800', color: '#7a7a6e', marginBottom: 2 },
+  noteText: { fontSize: 12, color: '#6b6b60' },
+  previewBtns: { flexDirection: 'row', gap: 10, marginTop: 8 },
   backEditBtn: {
-    flex: 1, backgroundColor: '#fff',
-    borderRadius: 14, padding: 14,
-    alignItems: 'center',
-    borderWidth: 1, borderColor: '#e5e7eb',
+    flex: 1, backgroundColor: '#f5f2eb',
+    borderRadius: 14, padding: 14, alignItems: 'center',
+    borderWidth: 1, borderColor: '#d8d4c8',
   },
-  backEditText: {
-    fontSize: 14, fontWeight: '700', color: '#374151',
-  },
+  backEditText: { fontSize: 14, fontWeight: '700', color: '#3a3a30' },
   confirmBtn: {
-    flex: 1, backgroundColor: '#6e96eb',
-    borderRadius: 14, padding: 14,
-    alignItems: 'center',
+    flex: 1, backgroundColor: '#2d5a3d',
+    borderRadius: 14, padding: 14, alignItems: 'center',
   },
-  confirmText: {
-    fontSize: 14, fontWeight: '800', color: '#fff',
-  },
+  confirmText: { fontSize: 14, fontWeight: '800', color: '#fff' },
 });

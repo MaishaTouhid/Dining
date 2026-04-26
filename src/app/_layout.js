@@ -7,10 +7,10 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <Stack
         screenOptions={{
-          headerStyle: { backgroundColor: '#6e96eb' },
+          headerStyle: { backgroundColor: '#2d5a3d' },
           headerTintColor: 'white',
           headerTitleStyle: { fontWeight: '800' },
-          contentStyle: { backgroundColor: '#F5F7FB' },
+          contentStyle: { backgroundColor: '#edeae3' },
           headerTitleAlign: 'center',
         }}
       >
@@ -35,6 +35,8 @@ export default function RootLayout() {
       <Stack.Screen name="DailyReset" options={{ title: 'Daily Reset' }} />
       <Stack.Screen name="Verification" options={{ title: 'Verification' }} />
       <Stack.Screen name="SuccessScreen" options={{ headerShown: false }} />
+      <Stack.Screen name="FoodDetail" options={{ title: 'Food Detail' }} />
+       <Stack.Screen name="AvailableFood"      options={{ title: 'Available Food Menu' }} />
       </Stack>
     </SafeAreaProvider>
   );
