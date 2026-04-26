@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verification</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background: #f4f6fb; color: #1f2937; }
+    .app { width: 100%; max-width: 390px; min-height: 100vh; margin: 0 auto; background: #f4f6fb; }
+    .header {
+      height: 74px; background: #7890d8; position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .back-btn {
+      position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+      color: white; text-decoration: none; font-size: 34px;
+    }
+    .header-title { color: white; font-size: 22px; font-weight: 500; }
+    .content { padding: 28px 20px 34px; }
+    .page-title { font-size: 34px; font-weight: 500; color: #1d2433; margin-bottom: 12px; }
+    .meta-text { font-size: 16px; color: #6d7688; margin-bottom: 20px; }
+    .card {
+      background: white; border: 2px solid #d7dbe5; border-radius: 24px;
+      padding: 18px; box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04); margin-bottom: 16px;
+    }
+    .card-title { font-size: 22px; font-weight: 500; margin-bottom: 14px; }
+    .row {
+      display: flex; justify-content: space-between; gap: 12px; padding: 12px 0;
+      border-top: 1px solid #edf1f7;
+    }
+    .row:first-of-type { border-top: none; padding-top: 0; }
+    .label { font-size: 15px; color: #6d7688; }
+    .value { font-size: 15px; font-weight: 700; color: #1d2433; text-align: right; }
+    .history-list { display: grid; gap: 12px; }
+    .history-item {
+      background: #f8faff; border: 2px solid #edf1f7; border-radius: 18px; padding: 14px;
+    }
+    .history-top { display: flex; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+    .history-name { font-size: 16px; font-weight: 700; }
+    .history-time { font-size: 13px; color: #6d7688; }
+    .history-text { font-size: 14px; color: #475467; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <a href="#" class="back-btn">←</a>
+      <div class="header-title">Verification</div>
+    </div>
+
+    <div class="content">
+      <div class="page-title">Verification Details</div>
+      <div class="meta-text">Hall: hb • Dining • Date: 2026-03-12</div>
+
+      <div class="card">
+        <div class="card-title">Current Record</div>
+
+        <div class="row">
+          <div class="label">Updated by</div>
+          <div class="value">Abir Hasan</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Role</div>
+          <div class="value">Dining Moderator</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Last updated</div>
+          <div class="value">12 Mar 2026, 2:55 AM</div>
+        </div>
+
+        <div class="row">
+          <div class="label">Verification status</div>
+          <div class="value">Pending</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Update History</div>
+
+        <div class="history-list">
+          <div class="history-item">
+            <div class="history-top">
+              <div class="history-name">Abir Hasan</div>
+              <div class="history-time">12 Mar 2026, 2:55 AM</div>
+            </div>
+            <div class="history-text">Updated lunch items and changed item status.</div>
+          </div>
+
+          <div class="history-item">
+            <div class="history-top">
+              <div class="history-name">Nafis Ahmed</div>
+              <div class="history-time">11 Mar 2026, 9:10 PM</div>
+            </div>
+            <div class="history-text">Added dinner menu and saved remaining quantity.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

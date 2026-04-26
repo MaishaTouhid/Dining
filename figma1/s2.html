@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore Halls</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6fb;
+      color: #1f2937;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 390px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: #f4f6fb;
+    }
+
+    .header {
+      background: #6f8fdb;
+      color: white;
+      padding: 18px 16px 22px;
+      position: relative;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 16px;
+      top: 14px;
+      font-size: 24px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .header-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .content {
+      padding: 18px 16px 28px;
+    }
+
+    .page-title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    .page-text {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #667085;
+      margin-bottom: 16px;
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 16px;
+      color: #98a2b3;
+    }
+
+    .search-input {
+      width: 100%;
+      height: 52px;
+      border: 1px solid #dbe4f0;
+      border-radius: 18px;
+      background: white;
+      padding: 0 14px 0 42px;
+      font-size: 15px;
+      color: #111827;
+      outline: none;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+    }
+
+    .search-input::placeholder {
+      color: #98a2b3;
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .filter-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 38px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid #d0d5dd;
+      background: white;
+      color: #344054;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .filter-chip.active {
+      background: #edf4ff;
+      border-color: #bfd2ff;
+      color: #3563d8;
+    }
+
+    .top-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .action-btn {
+      display: block;
+      text-decoration: none;
+      background: white;
+      border: 1px solid #dbe4f0;
+      border-radius: 18px;
+      padding: 14px 12px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      color: inherit;
+    }
+
+    .action-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 4px;
+    }
+
+    .action-text {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #667085;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 12px;
+    }
+
+    .hall-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .hall-card {
+      display: block;
+      text-decoration: none;
+      background: white;
+      border: 1px solid #dbe4f0;
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      color: inherit;
+    }
+
+    .hall-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .hall-name {
+      font-size: 17px;
+      font-weight: 800;
+      color: #111827;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+
+    .hall-sub {
+      font-size: 14px;
+      color: #667085;
+      line-height: 1.5;
+    }
+
+    .type-badge {
+      min-width: 64px;
+      text-align: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .boys {
+      background: #edf4ff;
+      color: #3563d8;
+    }
+
+    .girls {
+      background: #fff0f6;
+      color: #c11574;
+    }
+
+    .hall-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .menu-preview {
+      font-size: 13px;
+      color: #667085;
+      line-height: 1.5;
+    }
+
+    .update-label {
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .updated {
+      background: #ecfdf3;
+      color: #15803d;
+      border: 1px solid #b7e4c0;
+    }
+
+    .not-updated {
+      background: #f2f4f7;
+      color: #667085;
+      border: 1px solid #e4e7ec;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <a href="#" class="back-btn">←</a>
+      <div class="header-title">Explore Halls</div>
+    </div>
+
+    <div class="content">
+      <div class="page-title">Hall List</div>
+      <div class="page-text">
+        Search halls, filter by type, and check whether today's menu has been updated.
+      </div>
+
+      <div class="search-box">
+        <span class="search-icon">⌕</span>
+        <input class="search-input" type="text" placeholder="Search hall name" />
+      </div>
+
+      <div class="filter-row">
+        <a href="#" class="filter-chip active">All</a>
+        <a href="#" class="filter-chip">Boys</a>
+        <a href="#" class="filter-chip">Girls</a>
+      </div>
+
+      <div class="top-actions">
+        <a href="feast.html" class="action-btn">
+          <div class="action-title">Feast</div>
+          <div class="action-text">See feast date, menu, and price</div>
+        </a>
+
+        <a href="notice.html" class="action-btn">
+          <div class="action-title">Notice</div>
+          <div class="action-text">View important hall dining updates</div>
+        </a>
+      </div>
+
+      <div class="section-title">Available Halls</div>
+
+      <div class="hall-list">
+        <a href="#" class="hall-card">
+          <div class="hall-top">
+            <div>
+              <div class="hall-name">Shaheed Habibur Rahman Hall</div>
+              <div class="hall-sub">Tap to view today's dining and canteen menu</div>
+            </div>
+            <div class="type-badge boys">BOYS</div>
+          </div>
+
+          <div class="hall-bottom">
+            <div class="menu-preview">Breakfast • Lunch • Dinner</div>
+            <div class="update-label updated">Updated today</div>
+          </div>
+        </a>
+
+        <a href="#" class="hall-card">
+          <div class="hall-top">
+            <div>
+              <div class="hall-name">Shaheed Shamsuzzoha Hall</div>
+              <div class="hall-sub">Tap to view today's dining and canteen menu</div>
+            </div>
+            <div class="type-badge boys">BOYS</div>
+          </div>
+
+          <div class="hall-bottom">
+            <div class="menu-preview">Breakfast • Lunch • Dinner</div>
+            <div class="update-label not-updated">Not updated</div>
+          </div>
+        </a>
+
+        <a href="#" class="hall-card">
+          <div class="hall-top">
+            <div>
+              <div class="hall-name">Rokeya Hall</div>
+              <div class="hall-sub">Tap to view today's dining and canteen menu</div>
+            </div>
+            <div class="type-badge girls">GIRLS</div>
+          </div>
+
+          <div class="hall-bottom">
+            <div class="menu-preview">Breakfast • Lunch • Dinner</div>
+            <div class="update-label updated">Updated today</div>
+          </div>
+        </a>
+
+        <a href="#" class="hall-card">
+          <div class="hall-top">
+            <div>
+              <div class="hall-name">Taposhi Rabeya Hall</div>
+              <div class="hall-sub">Tap to view today's dining and canteen menu</div>
+            </div>
+            <div class="type-badge girls">GIRLS</div>
+          </div>
+
+          <div class="hall-bottom">
+            <div class="menu-preview">Breakfast • Lunch • Dinner</div>
+            <div class="update-label not-updated">Not updated</div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

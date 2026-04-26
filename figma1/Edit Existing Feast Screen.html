@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edit Feast</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background: #f4f6fb; color: #1f2937; }
+    .app { width: 100%; max-width: 390px; min-height: 100vh; margin: 0 auto; background: #f4f6fb; }
+    .header {
+      height: 74px; background: #7890d8; position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .back-btn {
+      position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+      color: white; text-decoration: none; font-size: 34px;
+    }
+    .header-title { color: white; font-size: 22px; font-weight: 500; }
+    .content { padding: 28px 20px 34px; }
+    .page-title { font-size: 34px; font-weight: 500; color: #1d2433; margin-bottom: 12px; }
+    .meta-text { font-size: 16px; color: #6d7688; margin-bottom: 28px; }
+    .field-group { margin-bottom: 22px; }
+    .field-label { display: block; font-size: 18px; font-weight: 500; color: #1d2433; margin-bottom: 12px; }
+    .input-box, .textarea-box {
+      width: 100%; border: 2px solid #d7dbe5; border-radius: 22px; background: white;
+      outline: none; font-size: 18px; color: #1f2937; box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+    }
+    .input-box { height: 66px; padding: 0 22px; }
+    .textarea-box { min-height: 150px; padding: 18px 22px; resize: none; }
+    .action-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 6px; }
+    .btn { height: 60px; border-radius: 26px; font-size: 18px; font-weight: 500; border: none; cursor: pointer; }
+    .delete-btn { background: #fff5f4; color: #b42318; border: 2px solid #f5b8b0; }
+    .save-btn { background: #7890d8; color: white; box-shadow: 0 10px 22px rgba(120, 144, 216, 0.18); }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <a href="#" class="back-btn">←</a>
+      <div class="header-title">Edit Feast</div>
+    </div>
+
+    <div class="content">
+      <div class="page-title">Edit Feast</div>
+      <div class="meta-text">Hall: hb • Canteen</div>
+
+      <div class="field-group">
+        <label class="field-label">Date</label>
+        <input class="input-box" type="text" value="2026-03-20" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Title</label>
+        <input class="input-box" type="text" value="Briyani Feast" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Time Range</label>
+        <input class="input-box" type="text" value="8:00 PM - 9:00 PM" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Menu</label>
+        <textarea class="textarea-box">Kacchi Briyani, Salad, Borhani</textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Price</label>
+        <input class="input-box" type="text" value="120" />
+      </div>
+
+      <div class="action-row">
+        <button class="btn delete-btn">Delete</button>
+        <button class="btn save-btn">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

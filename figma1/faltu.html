@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Save Success Toast</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6fb;
+      min-height: 100vh;
+      padding: 24px 16px;
+      color: #1f2937;
+    }
+
+    .page {
+      max-width: 390px;
+      margin: 0 auto;
+    }
+
+    .save-btn {
+      width: 100%;
+      height: 58px;
+      border: none;
+      border-radius: 20px;
+      background: #6f8fdb;
+      color: white;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      transform: translateX(-50%) translateY(20px);
+      width: calc(100% - 32px);
+      max-width: 390px;
+      background: #111827;
+      color: white;
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    .toast.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .toast-icon {
+      width: 34px;
+      height: 34px;
+      min-width: 34px;
+      border-radius: 50%;
+      background: #22c55e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .toast-text {
+      flex: 1;
+    }
+
+    .toast-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .toast-message {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #d1d5db;
+    }
+
+    .toast-close {
+      background: transparent;
+      border: none;
+      color: #9ca3af;
+      font-size: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <button class="save-btn" onclick="showToast('Menu saved successfully', 'Your latest changes are now updated.')">
+      Save Menu
+    </button>
+  </div>
+
+  <div class="toast" id="successToast">
+    <div class="toast-icon">✓</div>
+
+    <div class="toast-text">
+      <div class="toast-title" id="toastTitle">Saved successfully</div>
+      <div class="toast-message" id="toastMessage">Your changes have been updated.</div>
+    </div>
+
+    <button class="toast-close" onclick="hideToast()">×</button>
+  </div>
+
+  <script>
+    let toastTimer;
+
+    function showToast(title, message) {
+      const toast = document.getElementById("successToast");
+      const toastTitle = document.getElementById("toastTitle");
+      const toastMessage = document.getElementById("toastMessage");
+
+      toastTitle.textContent = title;
+      toastMessage.textContent = message;
+
+      toast.classList.add("show");
+
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        hideToast();
+      }, 2500);
+    }
+
+    function hideToast() {
+      document.getElementById("successToast").classList.remove("show");
+    }
+  </script>
+</body>
+</html>

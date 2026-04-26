@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Onboarding 2</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #eef0f5;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .screen {
+      width: 100%;
+      max-width: 390px;
+      height: 100vh;
+      max-height: 844px;
+      background: #eef0f5;
+      position: relative;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .skip {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      text-decoration: none;
+      color: #666;
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .icon-box {
+      width: 120px;
+      height: 120px;
+      border-radius: 30px;
+      background: linear-gradient(180deg, #88a6ee, #7593db);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 34px;
+      font-weight: bold;
+      box-shadow: 0 14px 28px rgba(90, 110, 180, 0.18);
+      margin-bottom: 28px;
+    }
+
+    .title {
+      font-size: 28px;
+      font-weight: 800;
+      color: #111;
+      margin-bottom: 14px;
+    }
+
+    .description {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #555;
+      max-width: 300px;
+      margin-bottom: 28px;
+    }
+
+    .dots {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #c7d2ee;
+    }
+
+    .dot.active {
+      background: #7d99df;
+    }
+
+    .button-row {
+      width: 100%;
+      max-width: 300px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      flex: 1;
+      text-decoration: none;
+      padding: 15px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .btn-back {
+      background: #dfe5f3;
+      color: #333;
+    }
+
+    .btn-next {
+      background: #7d99df;
+      color: white;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      font-size: 13px;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <div class="screen">
+    <a href="onboarding3.html" class="skip">Skip</a>
+
+    <div class="icon-box">🍽</div>
+
+    <h1 class="title">See Daily Meals</h1>
+    <p class="description">
+      View breakfast, lunch, and dinner menu easily. Know what is available before going to the dining hall.
+    </p>
+
+    <div class="dots">
+      <span class="dot"></span>
+      <span class="dot active"></span>
+      <span class="dot"></span>
+    </div>
+
+    <div class="button-row">
+      <a href="onboarding1.html" class="btn btn-back">Back</a>
+      <a href="onboarding3.html" class="btn btn-next">Next</a>
+    </div>
+
+    <div class="footer">Rajshahi University • Hall Dining</div>
+  </div>
+</body>
+</html>

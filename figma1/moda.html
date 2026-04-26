@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moderator Role</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6fb;
+      color: #1f2937;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 390px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: #f4f6fb;
+    }
+
+    .header {
+      background: #6f8fdb;
+      color: #ffffff;
+      padding: 18px 16px 20px;
+      position: relative;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 16px;
+      top: 14px;
+      font-size: 24px;
+      color: #ffffff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .header-title {
+      text-align: center;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .content {
+      min-height: calc(100vh - 74px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 24px 16px 32px;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .intro-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 10px;
+    }
+
+    .intro-text {
+      font-size: 15px;
+      color: #667085;
+      line-height: 1.6;
+    }
+
+    .button-group {
+      display: grid;
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .role-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      padding: 17px 16px;
+      border-radius: 18px;
+      font-size: 18px;
+      font-weight: 700;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+    }
+
+    .primary-btn {
+      background: #6f8fdb;
+      color: #ffffff;
+      border: 1px solid #6f8fdb;
+    }
+
+    .secondary-btn {
+      background: #ffffff;
+      color: #111827;
+      border: 1px solid #dbe4f0;
+    }
+
+    .back-link {
+      text-align: center;
+    }
+
+    .back-link a {
+      text-decoration: none;
+      color: #344054;
+      font-size: 16px;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <a href="#" class="back-btn">←</a>
+      <div class="header-title">Moderator</div>
+    </div>
+
+    <div class="content">
+      <div class="intro">
+        <div class="intro-title">Moderator</div>
+        <div class="intro-text">Select your responsibility</div>
+      </div>
+
+      <div class="button-group">
+        <a href="dining-moderator.html" class="role-btn primary-btn">Dining Moderator</a>
+        <a href="canteen-moderator.html" class="role-btn secondary-btn">Canteen Moderator</a>
+      </div>
+
+      <div class="back-link">
+        <a href="#">← Back</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

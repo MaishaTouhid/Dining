@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Success</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+
+    body {
+      background: #f4f6fb;
+      color: #1f2937;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 390px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: #f4f6fb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 20px;
+    }
+
+    .card {
+      width: 100%;
+      background: white;
+      border-radius: 28px;
+      padding: 34px 22px 22px;
+      text-align: center;
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+      border: 2px solid #e3e7ef;
+    }
+
+    .icon-wrap {
+      width: 92px;
+      height: 92px;
+      border-radius: 50%;
+      background: #ecfdf3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 22px;
+    }
+
+    .icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #22c55e;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      font-weight: 700;
+    }
+
+    .title {
+      font-size: 30px;
+      font-weight: 500;
+      color: #1d2433;
+      margin-bottom: 10px;
+    }
+
+    .text {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #6d7688;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      width: 100%;
+      height: 60px;
+      border: none;
+      border-radius: 26px;
+      font-size: 19px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-bottom: 12px;
+    }
+
+    .primary {
+      background: #7890d8;
+      color: white;
+      box-shadow: 0 10px 22px rgba(120, 144, 216, 0.18);
+    }
+
+    .secondary {
+      background: white;
+      color: #1d2433;
+      border: 2px solid #d7dbe5;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="card">
+      <div class="icon-wrap">
+        <div class="icon">✓</div>
+      </div>
+
+      <div class="title">Success</div>
+      <div class="text">Menu saved successfully. Students can now see the updated information.</div>
+
+      <button class="btn primary">Back to Dashboard</button>
+      <button class="btn secondary">Edit Again</button>
+    </div>
+  </div>
+</body>
+</html>

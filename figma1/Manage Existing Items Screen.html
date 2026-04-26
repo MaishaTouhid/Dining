@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Manage Existing Items</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background: #f4f6fb; color: #1f2937; }
+    .app { width: 100%; max-width: 390px; min-height: 100vh; margin: 0 auto; background: #f4f6fb; }
+    .header {
+      height: 74px; background: #7890d8; position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .back-btn {
+      position: absolute; left: 18px; top: 50%; transform: translateY(-50%);
+      color: white; text-decoration: none; font-size: 34px;
+    }
+    .header-title { color: white; font-size: 22px; font-weight: 500; }
+    .content { padding: 28px 20px 34px; }
+    .page-title { font-size: 34px; font-weight: 500; color: #1d2433; margin-bottom: 12px; }
+    .meta-text { font-size: 16px; color: #6d7688; margin-bottom: 20px; }
+    .top-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 18px; }
+    .small-btn {
+      height: 52px; border-radius: 22px; font-size: 15px; font-weight: 500; border: none; cursor: pointer;
+    }
+    .warning { background: #fff7ed; color: #c2410c; border: 2px solid #f4cb91; }
+    .danger { background: #fff5f4; color: #b42318; border: 2px solid #f5b8b0; }
+    .item-list { display: grid; gap: 14px; }
+    .item-card {
+      background: white; border: 2px solid #d7dbe5; border-radius: 24px;
+      padding: 18px; box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+    }
+    .item-top { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+    .item-name { font-size: 20px; font-weight: 500; margin-bottom: 5px; }
+    .item-meta { font-size: 15px; color: #6d7688; line-height: 1.6; }
+    .tag {
+      padding: 8px 12px; border-radius: 999px; font-size: 12px; font-weight: 700;
+      background: #edf4ff; color: #3563d8; border: 1px solid #bfd2ff; white-space: nowrap;
+    }
+    .item-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+    .item-btn {
+      height: 48px; border-radius: 20px; font-size: 15px; font-weight: 500; border: none; cursor: pointer;
+    }
+    .edit { background: white; color: #1d2433; border: 2px solid #d7dbe5; }
+    .remove { background: #fff5f4; color: #b42318; border: 2px solid #f5b8b0; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <a href="#" class="back-btn">←</a>
+      <div class="header-title">Manage Items</div>
+    </div>
+
+    <div class="content">
+      <div class="page-title">Manage Existing Items</div>
+      <div class="meta-text">Hall: hb • Lunch</div>
+
+      <div class="top-actions">
+        <button class="small-btn warning">Reset Meal</button>
+        <button class="small-btn danger">Clear All</button>
+      </div>
+
+      <div class="item-list">
+        <div class="item-card">
+          <div class="item-top">
+            <div>
+              <div class="item-name">Briyani</div>
+              <div class="item-meta">৳50 • Remaining: 100</div>
+            </div>
+            <div class="tag">AVAILABLE</div>
+          </div>
+
+          <div class="item-actions">
+            <button class="item-btn edit">Edit Item</button>
+            <button class="item-btn remove">Remove</button>
+          </div>
+        </div>
+
+        <div class="item-card">
+          <div class="item-top">
+            <div>
+              <div class="item-name">Achar</div>
+              <div class="item-meta">৳5 • Remaining: 60</div>
+            </div>
+            <div class="tag">LOW</div>
+          </div>
+
+          <div class="item-actions">
+            <button class="item-btn edit">Edit Item</button>
+            <button class="item-btn remove">Remove</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post Notice</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6fb;
+      color: #1f2937;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 390px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: #f4f6fb;
+    }
+
+    .header {
+      height: 74px;
+      background: #7890d8;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-btn {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: white;
+      text-decoration: none;
+      font-size: 34px;
+      line-height: 1;
+      font-weight: 400;
+    }
+
+    .header-title {
+      color: white;
+      font-size: 22px;
+      font-weight: 500;
+    }
+
+    .content {
+      padding: 28px 20px 34px;
+    }
+
+    .page-title {
+      font-size: 34px;
+      font-weight: 500;
+      color: #1d2433;
+      margin-bottom: 14px;
+    }
+
+    .meta-text {
+      font-size: 16px;
+      color: #6d7688;
+      margin-bottom: 30px;
+    }
+
+    .field-group {
+      margin-bottom: 24px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 18px;
+      font-weight: 500;
+      color: #1d2433;
+      margin-bottom: 14px;
+    }
+
+    .input-box,
+    .textarea-box {
+      width: 100%;
+      border: 2px solid #d7dbe5;
+      border-radius: 22px;
+      background: #ffffff;
+      outline: none;
+      font-size: 18px;
+      color: #1f2937;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+    }
+
+    .input-box {
+      height: 66px;
+      padding: 0 22px;
+    }
+
+    .textarea-box {
+      min-height: 170px;
+      padding: 18px 22px;
+      resize: none;
+    }
+
+    .input-box::placeholder,
+    .textarea-box::placeholder {
+      color: #6d7688;
+    }
+
+    .action-stack {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .secondary-btn {
+      width: 100%;
+      height: 64px;
+      border-radius: 28px;
+      border: 2px solid #d7dbe5;
+      background: #ffffff;
+      color: #1d2433;
+      font-size: 22px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.04);
+    }
+
+    .submit-btn {
+      width: 100%;
+      height: 64px;
+      border: none;
+      border-radius: 28px;
+      background: #7890d8;
+      color: white;
+      font-size: 22px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 10px 22px rgba(120, 144, 216, 0.18);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <a href="#" class="back-btn">←</a>
+      <div class="header-title">Post Notice</div>
+    </div>
+
+    <div class="content">
+      <div class="page-title">Post Notice</div>
+      <div class="meta-text">Hall: hb • Canteen</div>
+
+      <div class="field-group">
+        <label class="field-label">Type</label>
+        <input class="input-box" type="text" value="delay" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Title</label>
+        <input class="input-box" type="text" placeholder="Enter notice title" />
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Message</label>
+        <textarea class="textarea-box"></textarea>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Expires in (hours)</label>
+        <input class="input-box" type="text" value="6" />
+      </div>
+
+      <div class="action-stack">
+        <a href="#" class="secondary-btn">Edit Notice</a>
+        <a href="#" class="submit-btn">Post Notice</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

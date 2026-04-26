@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Home UI</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f4f6fb;
+      color: #1f2937;
+    }
+
+    .app {
+      max-width: 430px;
+      margin: 0 auto;
+      min-height: 100vh;
+      background: #f4f6fb;
+    }
+
+    .header {
+      background: linear-gradient(180deg, #7da0ea, #6e8fdb);
+      color: white;
+      padding: 24px 18px 28px;
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+    }
+
+    .app-name {
+      font-size: 14px;
+      opacity: 0.9;
+      margin-bottom: 8px;
+    }
+
+    .header-title {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .header-text {
+      font-size: 14px;
+      line-height: 1.6;
+      opacity: 0.95;
+      max-width: 320px;
+    }
+
+    .content {
+      padding: 18px 16px 28px;
+    }
+
+    .top-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: -8px;
+      margin-bottom: 16px;
+    }
+
+    .action-btn {
+      background: white;
+      border: none;
+      border-radius: 18px;
+      padding: 16px 14px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .action-btn-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 6px;
+    }
+
+    .action-btn-text {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #6b7280;
+    }
+
+    .search-box {
+      background: white;
+      border-radius: 16px;
+      padding: 14px 16px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+      margin-bottom: 18px;
+    }
+
+    .search-box input {
+      width: 100%;
+      border: none;
+      outline: none;
+      font-size: 15px;
+      background: transparent;
+    }
+
+    .search-box input::placeholder {
+      color: #94a3b8;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 12px;
+    }
+
+    .hall-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .hall-card {
+      background: white;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .hall-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+    }
+
+    .hall-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #111827;
+      line-height: 1.4;
+    }
+
+    .hall-sub {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .badge {
+      padding: 6px 11px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .boys {
+      background: #edf3ff;
+      color: #4f74c8;
+    }
+
+    .girls {
+      background: #fff0f7;
+      color: #c2558d;
+    }
+
+    .hall-footer {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #7c8798;
+    }
+
+    @media (max-width: 420px) {
+      .header-title {
+        font-size: 25px;
+      }
+
+      .top-actions {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="header">
+      <div class="app-name">HallMenu RU</div>
+      <div class="header-title">Explore Dining</div>
+      <div class="header-text">
+        Check hall menu, feast updates, and important notices before you go.
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="top-actions">
+        <button class="action-btn">
+          <div class="action-btn-title">Feast</div>
+          <div class="action-btn-text">See feast date and special menu</div>
+        </button>
+
+        <button class="action-btn">
+          <div class="action-btn-title">Notice</div>
+          <div class="action-btn-text">View important dining updates</div>
+        </button>
+      </div>
+
+      <div class="search-box">
+        <input type="text" placeholder="Search hall name" />
+      </div>
+
+      <div class="section-title">Halls</div>
+
+      <div class="hall-list">
+        <a href="#" class="hall-card">
+          <div class="hall-top">
+            <div>
+              <div class="hall-name">শহীদ হাবিবুর রহমান হল</div>
+              <div class="hall-sub">Tap to view today's menu</div>
+            </div>
+            <div class="badge boys">BOYS</div>
+          </div>
+          <div class="hall-footer">Breakfast • Lunch • Dinner</div>
+        </a>
+
+        <a href="#" class="hall-card">
+          <div class="hall-top">
+            <div>
+              <div class="hall-name">শহীদ শামসুজ্জোহা হল</div>
+              <div class="hall-sub">Tap to view today's menu</div>
+            </div>
+            <div class="badge boys">BOYS</div>
+          </div>
+          <div class="hall-footer">Breakfast • Lunch • Dinner</div>
+        </a>
+
+        <a href="#" class="hall-card">
+          <div class="hall-top">
+            <div>
+              <div class="hall-name">রোকেয়া হল</div>
+              <div class="hall-sub">Tap to view today's menu</div>
+            </div>
+            <div class="badge girls">GIRLS</div>
+          </div>
+          <div class="hall-footer">Breakfast • Lunch • Dinner</div>
+        </a>
+
+        <a href="#" class="hall-card">
+          <div class="hall-top">
+            <div>
+              <div class="hall-name">তাপসী রাবেয়া হল</div>
+              <div class="hall-sub">Tap to view today's menu</div>
+            </div>
+            <div class="badge girls">GIRLS</div>
+          </div>
+          <div class="hall-footer">Breakfast • Lunch • Dinner</div>
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
